@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Eğitmen Portalı - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+    <!-- Chart.js (Grafik İçin) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-coach-dark" style="padding-top: 80px; overflow: hidden;">
+    <!-- Scroll'u kapattık, dashboard hissi için -->
+
+    <%- include('partials/navbar') %>
+
+        <div class="container-fluid h-100 p-0">
+            <div class="row g-0 h-100">
+
+                <!-- 1. SOL SÜTUN: MÜŞTERİLER (CLIENTS) -->
+                <div class="col-md-2 bg-dark-sidebar border-end border-secondary p-3 d-none d-md-block"
+                    style="height: 92vh; overflow-y: auto;">
+
+                    <h5 class="text-white mb-4 fw-bold">Öğrenciler</h5>
+
+                    <!-- Arama -->
+                    <div class="input-group mb-4">
+                        <span class="input-group-text bg-dark border-secondary text-secondary"><i
+                                class="fa-solid fa-search"></i></span>
+                        <input type="text" class="form-control bg-dark border-secondary text-white"
+                            placeholder="Ara...">
+                    </div>
+
+                    <p class="text-secondary small text-uppercase fw-bold mb-2">Aktif Öğrenciler</p>
+
+                    <div class="list-group list-group-flush">
+                        <% students.forEach((student, index)=> { %>
+                            <a href="#"
+                                class="list-group-item list-group-item-action bg-transparent border-0 text-white d-flex align-items-center px-0 py-2 <%= index === 0 ? 'active-student' : '' %>">
+                                <div class="position-relative me-3">
+                                    <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
+                                        style="width: 40px; height: 40px;">
+                                        <%= student.fullName.charAt(0).toUpperCase() %>
+                                    </div>
+                                    <span
+                                        class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-dark rounded-circle"></span>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 small fw-bold">
+                                        <%= student.fullName %>
+                                    </h6>
+                                    <small class="text-secondary" style="font-size: 10px;">online</small>
+                                </div>
+                                <% if(index===0) { %>
+                                    <div class="ms-auto w-2 h-2 rounded-circle bg-primary"
+                                        style="width: 8px; height: 8px;"></div>
+                                    <% } %>
+                            </a>
+                            <% }) %>
+                    </div>
+                </div>
+
+                <!-- 2. ORTA SÜTUN: PROGRAM OLUŞTURUCU (WORKOUT BUILDER) -->
+                <div class="col-md-7 bg-dark-main p-4" style="height: 92vh; overflow-y: auto;">
+                    <h4 class="text-white fw-bold mb-4">Haftalık Program Oluşturucu</h4>
+
+                    <!-- Günler Grid'i -->
+                    <div class="row g-3 text-center">
+                        <% ['Pzt', 'Sal' , 'Çar' , 'Per' , 'Cum' , 'Cmt' , 'Paz' ].forEach(day=> { %>
+                            <div class="col">
+                                <div class="text-secondary mb-3">
+                                    <%= day %>
+                                </div>
+
+                                <!-- DERS KUTULARI (GÖRSEL ÖRNEK) -->
+                                <div class="workout-column"
+                                    style="min-height: 400px; border-right: 1px solid rgba(255,255,255,0.05);">
+
+                                    <% if (day==='Pzt' ) { %>
+                                        <!-- Dolu Gün Örneği -->
+                                        <div class="workout-card glow-blue mb-3">
+                                            <i class="fa-solid fa-dumbbell fa-2x mb-2"></i>
+                                            <div class="small fw-bold">Chest Press</div>
+                                            <div class="x-small text-muted">4x10</div>
+                                        </div>
+                                        <div class="workout-card mb-3">
+                                            <i class="fa-solid fa-person-running fa-2x mb-2"></i>
+                                            <div class="small fw-bold">Tricep Push</div>
+                                            <div class="x-small text-muted">3x15</div>
+                                        </div>
+                                        <% } %>
+
+                                            <% if (day==='Sal' ) { %>
+                                                <div class="workout-card mb-3">
+                                                    <i class="fa-solid fa-person-biking fa-2x mb-2"></i>
+                                                    <div class="small fw-bold">Squats</div>
+                                                    <div class="x-small text-muted">3x12</div>
+                                                </div>
+                                                <% } %>
+
+                                                    <% if (day==='Çar' ) { %>
+                                                        <div class="workout-card glow-blue mb-3">
+                                                            <i class="fa-solid fa-fire fa-2x mb-2"></i>
+                                                            <div class="small fw-bold">HIIT Cardio</div>
+                                                            <div class="x-small text-muted">20 dk</div>
+                                                        </div>
+                                                        <% } %>
+
+                                                            <!-- Boş Alanlar (Drop Zone) -->
+                                                            <div class="workout-placeholder"></div>
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                </div>
+
+                <!-- 3. SAĞ SÜTUN: ÖĞRENCİ İSTATİSTİKLERİ (SNAPSHOT) -->
+                <div class="col-md-3 bg-dark-sidebar border-start border-secondary p-4"
+                    style="height: 92vh; overflow-y: auto;">
+
+                    <!-- Seçili Öğrenci -->
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-3 text-dark fw-bold"
+                            style="width: 50px; height: 50px; font-size: 20px;">
+                            <%= students.length> 0 ? students[0].fullName.charAt(0) : '?' %>
+                        </div>
+                        <div>
+                            <h5 class="text-white mb-0">
+                                <%= students.length> 0 ? students[0].fullName : 'Öğrenci Yok' %>
+                            </h5>
+                            <small class="text-secondary">Premium Üye</small>
+                        </div>
+                    </div>
+
+                    <!-- Grafik -->
+                    <h6 class="text-secondary mb-3">Gelişim Grafiği</h6>
+                    <div class="chart-container mb-4" style="position: relative; height:150px; width:100%">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+
+                    <!-- Vücut Haritası (Heatmap) -->
+                    <div class="card bg-dark border-0 mb-4 text-center">
+                        <!-- Buraya temsili bir vücut resmi koyuyoruz -->
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Human_body_silhouette.svg/414px-Human_body_silhouette.svg.png"
+                            style="height: 200px; filter: invert(1) opacity(0.5); margin: 0 auto;">
+                        <!-- Üzerine "Glow" efekti CSS ile verilebilir -->
+                        <div class="body-glow"
+                            style="position: absolute; top: 30%; left: 45%; width: 20px; height: 20px; background: cyan; filter: blur(15px);">
+                        </div>
+                        <div class="body-glow"
+                            style="position: absolute; top: 50%; left: 40%; width: 20px; height: 20px; background: cyan; filter: blur(15px);">
+                        </div>
+                    </div>
+
+                    <!-- Alt İstatistikler -->
+                    <div class="d-flex justify-content-between text-white border-bottom border-secondary pb-2 mb-2">
+                        <span class="text-secondary">Mevcut Kilo:</span>
+                        <span class="fw-bold">
+                            <%= students.length> 0 ? students[0].weight : 0 %>kg
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-between text-white border-bottom border-secondary pb-2 mb-2">
+                        <span class="text-secondary">Hedef:</span>
+                        <span class="fw-bold text-info">
+                            <%= students.length> 0 && students[0].goal === 'lose' ? 'Kilo Ver' : 'Kazan' %>
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-between text-white">
+                        <span class="text-secondary">Yağ Oranı:</span>
+                        <span class="fw-bold">18%</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Grafik Scripti -->
+        <script>
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Hf1', 'Hf2', 'Hf3', 'Hf4', 'Hf5', 'Hf6'],
+                    datasets: [{
+                        label: 'Güç Artışı',
+                        data: [20, 35, 40, 55, 60, 75],
+                        borderColor: '#0dcaf0', // Neon Mavi
+                        tension: 0.4,
+                        pointBackgroundColor: '#0dcaf0'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { display: true, grid: { display: false }, ticks: { color: '#666' } },
+                        y: { display: false, grid: { display: false } }
+                    }
+                }
+            });
+        </script>
+
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Grup Dersleri - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-dark text-white" style="padding-top: 100px; background-image: url('/images/classes-bg.png');">
+
+    <%- include('partials/navbar') %>
+        <!-- HERO SECTION -->
+        <header class="classes-hero text-white">
+            <div class="position-relative z-2 px-3">
+                <h3 style="margin-bottom: 50px;">GRUP DERSLERI</h3>
+                <h1 class="text-uppercase mb-3 py">MOTİVASYON VE ENERJİ</h1>
+            </div>
+        </header>
+        <div class="container">
+            <p class="fw-bold mb-5 text-center">Profesyonel eğitmenler eşliğinde sınırlarını zorla, değişimi hisset.
+            </p>
+
+            <div class="row g-4">
+                <!-- Veritabanından Gelen Dersleri Döngüye Sokuyoruz -->
+                <% classes.forEach(classItem=> { %>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-0 text-white overflow-hidden shadow h-100">
+
+                            <!-- Resim -->
+                            <img src="<%= classItem.image %>" class="card-img" alt="<%= classItem.name %>"
+                                style="height: 300px; object-fit: cover; filter: brightness(0.6);">
+
+                            <!-- Üzerindeki Yazılar -->
+                            <div class="card-img-overlay d-flex flex-column justify-content-end">
+                                <h3 class="card-title fw-bold text-warning">
+                                    <%= classItem.name %>
+                                </h3>
+                                <p class="card-text text-light">
+                                    <%= classItem.desc %>
+                                </p>
+
+                                <!-- Link (urlId kullanıyoruz: /classes/pilates gibi) -->
+                                <a href="/classes/<%= classItem.urlId %>"
+                                    class="btn btn-outline-warning fw-bold stretched-link">
+                                    Detayları Gör
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+
+            <!-- Eğer hiç ders yoksa uyarı ver -->
+            <% if (classes.length===0) { %>
+                <div class="text-center mt-5">
+                    <p class="text-secondary">Henüz ders eklenmemiş. Lütfen /seed-classes adresine giderek verileri
+                        yükleyin.</p>
+                </div>
+                <% } %>
+
+        </div>
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

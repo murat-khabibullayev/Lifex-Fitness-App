@@ -1,0 +1,234 @@
+<!-- views/partials/navbar.ejs -->
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar fixed-top">
+    <div class="container-fluid" style="padding-right: 4%; padding-left: 4%;">
+        <!-- Logo her zaman Ana Sayfaya gider -->
+        <a class="navbar-brand" href="/">
+            <img src="/images/lifex-logo.png" alt="LIFEX Logo" class="navbar-logo">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+            <ul class="navbar-nav align-items-center">
+
+                <!-- Mevcut linklerin yanına ekle -->
+                <li class="nav-item"><a class="nav-link text-white" href="/clubs">Kulüplerimiz</a></li>
+                <% if (typeof user==='undefined' && !user || typeof user !=='undefined' && user && user.role==='user' ||
+                    typeof user !=='undefined' && user && user.role==='student' ) { %>
+                    <li class="nav-item"><a class="nav-link text-white" href="/classes">Grup Dersleri</a></li>
+                    <% } %>
+                        <li class="nav-item"><a
+                                class="nav-link text-white <%= (typeof page !== 'undefined' && page === 'tools') ? 'active-link' : '' %>"
+                                href="/tools">Hesaplamalar Araçları</a>
+                        </li>
+                        <% if (typeof user==='undefined' && !user || typeof user !=='undefined' && user &&
+                            user.role==='user' ) { %>
+                            <li class="nav-item"><a class="nav-link text-white" href="/membership">Üyelik paketleri</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link text-warning fw-bold"
+                                    href="/campaigns">Kampanyalar</a></li>
+                            <% } %>
+                                <!-- KULLANICI GİRİŞ YAPMIŞSA -->
+                                <% if (typeof user !=='undefined' && user) { %>
+
+                                    <li class="nav-item dropdown">
+                                        <!-- Navbar'daki Profil Kısmı -->
+                                        <a class="nav-link dropdown-toggle text-white fw-bold d-flex align-items-center"
+                                            href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+
+                                            <!-- RESİM KONTROLÜ -->
+                                            <% if (user.profileImage) { %>
+                                                <img src="<%= user.profileImage %>" alt="Profil"
+                                                    class="rounded-circle me-2 object-fit-cover"
+                                                    style="width: 35px; height: 35px; border: 2px solid #f1c40f;">
+                                                <% } else { %>
+                                                    <!-- Resim yoksa baş harf -->
+                                                    <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-2 text-dark fw-bold"
+                                                        style="width: 35px; height: 35px;">
+                                                        <%= user.fullName.charAt(0).toUpperCase() %>
+                                                    </div>
+                                                    <% } %>
+
+                                                        <%= user.fullName %>
+                                        </a>
+
+                                        <ul class="dropdown-menu dropdown-menu-end animate slideIn <%= typeof page !== 'undefined' && page.startsWith('admin') ? 'dropdown-menu-dark' : '' %>"
+                                            aria-labelledby="navbarDropdown">
+
+                                            <!-- HOCA İSE BU LİNK GÖRÜNSÜN -->
+                                            <% if (user.role==='coach' ) { %>
+                                                <li><a class="dropdown-item" href="/coach-dashboard">Eğitmen Paneli</a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <% } %>
+
+                                                    <!-- ADMIN İSE BU LİNK GÖRÜNSÜN -->
+                                                    <% if (user.role==='admin' ) { %>
+                                                        <li><a class="dropdown-item text-primary fw-bold"
+                                                                href="/admin/dashboard">Admin
+                                                                Paneli</a></li>
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <% } %>
+                                                            <!-- 1. Panel Linki -->
+                                                            <li>
+                                                                <a class="dropdown-item <%= (typeof page !== 'undefined' && page === 'dashboard') ? 'active-page' : '' %> dropdown-item-hover"
+                                                                    href="/dashboard/<%= user._id %>">
+                                                                    Panelim
+                                                                </a>
+                                                            </li>
+                                                            <!-- 2. Profil Linki -->
+                                                            <li>
+                                                                <a class="dropdown-item <%= (typeof page !== 'undefined' && page === 'profile') ? 'active-page' : '' %> dropdown-item-hover"
+                                                                    href="/profile">
+                                                                    Profilim
+                                                                </a>
+                                                            </li>
+                                                            <!-- Navbar Dropdown İçine Eklenecekler -->
+
+                                                            <!-- 1. Yemek Programım -->
+                                                            <li>
+                                                                <% if (user.age && user.weight && user.height &&
+                                                                    user.gender) { %>
+                                                                    <a class="dropdown-item <%= (typeof page !== 'undefined' && page === 'diet') ? 'active-page' : '' %> dropdown-item-hover"
+                                                                        href="/my-diet">
+                                                                        Beslenme Programım
+                                                                    </a>
+                                                                    <% } else { %>
+                                                                        <a class="dropdown-item <%= (typeof page !== 'undefined' && page === 'diet') ? 'active-page' : '' %> dropdown-item-hover"
+                                                                            href="/edit-profile"
+                                                                            onclick="alert('Program oluşturmak için önce profil bilgilerinizi (Yaş, Boy, Kilo, Cinsiyet) tamamlamalısınız.');">
+                                                                            Beslenme Programım
+                                                                        </a>
+                                                                        <% } %>
+                                                            </li>
+
+                                                            <!-- 2. Spor Programım -->
+                                                            <li>
+                                                                <% if (user.age && user.weight && user.height &&
+                                                                    user.gender) { %>
+                                                                    <a class="dropdown-item <%= (typeof page !== 'undefined' && page === 'workout') ? 'active-page' : '' %> dropdown-item-hover"
+                                                                        href="/my-workout">
+                                                                        Spor Programım
+                                                                    </a>
+                                                                    <% } else { %>
+                                                                        <a class="dropdown-item <%= (typeof page !== 'undefined' && page === 'workout') ? 'active-page' : '' %> dropdown-item-hover"
+                                                                            href="/edit-profile"
+                                                                            onclick="alert('Program oluşturmak için önce profil bilgilerinizi (Yaş, Boy, Kilo, Cinsiyet) tamamlamalısınız.');">
+                                                                            Spor Programım
+                                                                        </a>
+                                                                        <% } %>
+                                                            </li>
+                                                            <% if (user.role!='admin' && user.role!='coach' ) { %>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="/my-membership">
+                                                                        Üyelik Durumum
+                                                                    </a>
+                                                                </li>
+                                                                <% } %>
+                                                                    <% if (user.role!='admin' && user.role!='coach' ) {
+                                                                        %>
+                                                                        <li>
+                                                                            <a class="dropdown-item"
+                                                                                href="/my-reservations">
+                                                                                Rezervasyonlarım
+                                                                            </a>
+                                                                        </li>
+                                                                        <% } %>
+                                                                            <li>
+                                                                                <a class="dropdown-item"
+                                                                                    href="/messages">
+                                                                                    Mesajlar
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <hr class="dropdown-divider">
+                                                                            </li>
+
+                                                                            <!-- 3. Ayarlar Linki -->
+                                                                            <li>
+                                                                                <a class="dropdown-item <%= (typeof page !== 'undefined' && page === 'settings') ? 'active-page' : '' %> dropdown-item-hover"
+                                                                                    href="/settings">
+                                                                                    Ayarlar & Görünüm
+                                                                                </a>
+                                                                            </li>
+
+                                                                            <!-- 4. Göstermelik Yardım Linki (Profesyonel dursun diye) -->
+                                                                            <% if (user.role!='admin' ) { %>
+                                                                                <li>
+                                                                                    <a class="dropdown-item <%= (typeof page !== 'undefined' && page === 'help') ? 'active-page' : '' %> dropdown-item-hover"
+                                                                                        href="/support">
+                                                                                        Yardım / Destek
+                                                                                    </a>
+                                                                                </li>
+                                                                                <% } %>
+                                                                                    <li>
+                                                                                        <hr class="dropdown-divider">
+                                                                                    </li>
+
+                                                                                    <!-- 5. Çıkış Linki -->
+                                                                                    <li>
+                                                                                        <a class="dropdown-item text-danger fw-bold dropdown-item-hover"
+                                                                                            href="/logout">
+                                                                                            Çıkış Yap
+                                                                                        </a>
+                                                                                    </li>
+                                        </ul>
+                                    </li>
+
+                                    <!-- KULLANICI GİRİŞ YAPMAMIŞSA (Misafir) -->
+                                    <% } else { %>
+
+                                        <!-- AYRILMIŞ BUTONLAR -->
+                                        <li class="nav-item ms-3">
+                                            <a href="/login" class="btn btn-outline-light me-2">Giriş Yap</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/register" class="btn btn-register-custom">Kayıt Ol</a>
+                                        </li>
+                                        <% } %>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+<script>
+    let lastScrollTop = 0; // Son kaydırma konumu
+    const navbar = document.querySelector('.navbar'); // Navbar'ı seç
+
+    window.addEventListener('scroll', function () {
+        // Şu anki kaydırma konumu
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        // Sayfanın en tepesindeysek (veya negatifse - iOS hatası) navbar hep görünsün
+        if (scrollTop <= 0) {
+            navbar.classList.remove('navbar-hidden');
+            lastScrollTop = scrollTop;
+            return;
+        }
+
+        if (scrollTop > lastScrollTop) {
+            // AŞAĞI KAYDIRIYOR -> Gizle
+            navbar.classList.add('navbar-hidden');
+        } else {
+            // YUKARI KAYDIRIYOR -> Göster
+            navbar.classList.remove('navbar-hidden');
+        }
+
+        lastScrollTop = scrollTop; // Konumu güncelle
+    });
+</script>
+<script>
+    // Sayfa her yüklendiğinde çalışır
+    const currentTheme = localStorage.getItem('darkMode');
+
+    if (currentTheme === 'enabled') {
+        document.body.classList.add('dark-mode');
+    }
+</script>

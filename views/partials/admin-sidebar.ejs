@@ -1,0 +1,50 @@
+<div id="adminSidebar" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark m"
+    style="width: 280px; min-height: 100vh; position: fixed; top: 0; left: 0; border-right: 1px solid #333;">
+    <a href="/admin/dashboard"
+        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <span class="fs-4 fw-bold text-warning" style="letter-spacing: 2px;">LIFEX ADMIN</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="/admin/dashboard"
+                class="nav-link text-white <%= page === 'admin-dashboard' ? 'active bg-warning text-dark fw-bold' : '' %>">
+                <i class="fa-solid fa-gauge me-2"></i> Genel Bakış
+            </a>
+        </li>
+        <li>
+            <a href="/admin/coaches"
+                class="nav-link text-white <%= page === 'admin-coaches' ? 'active bg-warning text-dark fw-bold' : '' %>">
+                <i class="fa-solid fa-user-tie me-2"></i> Eğitmenler
+            </a>
+        </li>
+        <li>
+            <a href="/admin/students"
+                class="nav-link text-white <%= page === 'admin-students' ? 'active bg-warning text-dark fw-bold' : '' %>">
+                <i class="fa-solid fa-users me-2"></i> Öğrenciler
+            </a>
+        </li>
+        <li>
+            <a href="/admin/content"
+                class="nav-link text-white <%= page === 'admin-content' ? 'active bg-warning text-dark fw-bold' : '' %>">
+                <i class="fa-solid fa-pen-to-square me-2"></i> İçerik Yönetimi
+            </a>
+        </li>
+    </ul>
+    <hr>
+    <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1"
+            data-bs-toggle="dropdown">
+            <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-2 text-dark fw-bold"
+                style="width: 32px; height: 32px;">A</div>
+            <strong>Yönetici</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+            <li><a class="dropdown-item" href="/">Siteye Dön</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item text-danger" href="/logout">Çıkış Yap</a></li>
+        </ul>
+    </div>
+</div>

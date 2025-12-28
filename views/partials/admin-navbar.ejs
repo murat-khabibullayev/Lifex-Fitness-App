@@ -1,0 +1,128 @@
+<!-- ADMIN TOP NAVBAR -->
+<nav class="navbar navbar-expand navbar-dark bg-transparent admin-top-navbar">
+    <div class="container-fluid" style="padding-right: 2.5%;">
+
+        <!-- 1. MENÜ AÇ/KAPA BUTONU (Buraya taşıdık) -->
+        <button class="btn btn-outline-warning me-3" onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <!-- 2. SAĞ TARAF İKONLARI -->
+        <ul class="navbar-nav ms-auto align-items-center">
+
+            <!-- A) DUYURU / MESAJ -->
+            <li class="nav-item dropdown me-3">
+                <a class="nav-link text-white position-relative" href="#" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-envelope fa-lg"></i>
+                    <!-- Kırmızı Nokta (Yeni mesaj varmış gibi) -->
+                    <span
+                        class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-lg">
+                    <li>
+                        <h6 class="dropdown-header">Mesaj Merkezi</h6>
+                    </li>
+                    <li><a class="dropdown-item" href="/messages"><i class="fa-solid fa-inbox me-2"></i> Gelen
+                            Kutusu</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item text-warning" href="#" data-bs-toggle="modal"
+                            data-bs-target="#announcementModal">
+                            <i class="fa-solid fa-bullhorn me-2"></i> Yeni Duyuru Yap
+                        </a></li>
+                </ul>
+            </li>
+
+            <!-- B) BİLDİRİMLER -->
+            <li class="nav-item dropdown me-4">
+                <a class="nav-link text-white position-relative" href="#" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-bell fa-lg"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        3
+                    </span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-lg">
+                    <li>
+                        <h6 class="dropdown-header">Bildirimler</h6>
+                    </li>
+                    <li><a class="dropdown-item small" href="#"><i class="fa-solid fa-user-plus text-success me-2"></i>
+                            Yeni üye kaydoldu (Ahmet)</a></li>
+                    <li><a class="dropdown-item small" href="#"><i class="fa-solid fa-money-bill text-warning me-2"></i>
+                            Ödeme alındı: 2000₺</a></li>
+                    <li><a class="dropdown-item small" href="#"><i
+                                class="fa-solid fa-triangle-exclamation text-danger me-2"></i> Sistem uyarısı:
+                            Yedekleme</a></li>
+                </ul>
+            </li>
+
+            <!-- C) PROFIL & MENÜ -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white fw-bold d-flex align-items-center" href="#"
+                    id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                    <!-- RESİM KONTROLÜ -->
+                    <% if (user.profileImage) { %>
+                        <img src="<%= user.profileImage %>" alt="Profil" class="rounded-circle me-2 object-fit-cover"
+                            style="width: 35px; height: 35px; border: 2px solid #f1c40f;">
+                        <% } else { %>
+                            <!-- Resim yoksa baş harf -->
+                            <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-2 text-dark fw-bold"
+                                style="width: 35px; height: 35px;">
+                                <%= user.fullName.charAt(0).toUpperCase() %>
+                            </div>
+                            <% } %>
+
+                                <%= user.fullName %>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-lg">
+                    <li><a class="dropdown-item" href="/"><i class="fa-solid fa-globe me-2"></i> Siteye Dön</a></li>
+                    <li><a class="dropdown-item" href="/profile"><i class="fa-solid fa-gear me-2"></i> Profil
+                            Ayarları</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item text-danger fw-bold" href="/logout"><i
+                                class="fa-solid fa-right-from-bracket me-2"></i> Çıkış</a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+
+<!-- DUYURU MODALI (POP-UP) -->
+<div class="modal fade" id="announcementModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title"><i class="fa-solid fa-bullhorn text-warning me-2"></i> Duyuru Yayınla</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/send-announcement" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Kimlere Gidecek?</label>
+                        <select name="targetAudience" class="form-select bg-secondary text-white border-0">
+                            <option value="all">Herkese (Tüm Üyeler)</option>
+                            <option value="coaches">Sadece Hocalara</option>
+                            <option value="students">Sadece Öğrencilere</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Duyuru Başlığı</label>
+                        <input type="text" name="title" class="form-control bg-secondary text-white border-0" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mesaj İçeriği</label>
+                        <textarea name="message" class="form-control bg-secondary text-white border-0" rows="4"
+                            required></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-warning fw-bold text-dark">GÖNDER</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

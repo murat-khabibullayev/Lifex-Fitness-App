@@ -1,0 +1,54 @@
+{
+    "bmi_ranges": [
+        {
+            "min": 0,
+            "max": 18.5,
+            "status": "Zayıf",
+            "riskFactor": 1
+        },
+        {
+            "min": 18.5,
+            "max": 24.9,
+            "status": "Normal",
+            "riskFactor": 0
+        },
+        {
+            "min": 25,
+            "max": 29.9,
+            "status": "Fazla Kilolu",
+            "riskFactor": 2
+        },
+        {
+            "min": 30,
+            "max": 34.9,
+            "status": "Obez (1. Derece)",
+            "riskFactor": 3
+        },
+        {
+            "min": 35,
+            "max": 40,
+            "status": "Obez (2. Derece)",
+            "riskFactor": 4
+        },
+        {
+            "min": 40,
+            "max": 100,
+            "status": "Aşırı Obez",
+            "riskFactor": 5
+        }
+    ],
+    "disease_risks": {
+        "diabetes": {
+            "base_risk": 5,
+            "age_factor": 0.5,
+            "bmi_threshold": 25,
+            "sedentary_penalty": 10
+        },
+        "heart_disease": {
+            "base_risk": 3,
+            "age_factor": 0.8,
+            "bmi_threshold": 30,
+            "sedentary_penalty": 15
+        }
+    }
+}

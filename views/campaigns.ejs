@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Kampanyalar - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-dark text-white"> <!-- padding-top vermedik çünkü hero section var -->
+
+    <%- include('partials/navbar') %>
+
+        <!-- HERO SECTION -->
+        <header class="classes-hero text-white" style="background-image: url('/images/campaign-bg.jpg')!important;">
+            <div class="position-relative z-2 px-3">
+                <h1 class="text-uppercase mb-3 fw-bold display-3">FIRSATLARI YAKALA</h1>
+                <p class="mb-0 fs-4">Spora başlamak için en doğru zaman şimdi.</p>
+            </div>
+        </header>
+
+        <div class="container py-5">
+            <div class="row g-4">
+                <% campaigns.forEach(camp=> { %>
+                    <div class="col-md-6">
+                        <div class="card bg-dark border-secondary h-100 overflow-hidden shadow-lg hover-scale">
+                            <!-- Resim -->
+                            <div style="height: 300px; overflow: hidden;">
+                                <img src="<%= camp.image %>" class="w-100 h-100 object-fit-cover"
+                                    alt="<%= camp.title %>">
+                            </div>
+                            <div class="card-body p-4">
+                                <h3 class="fw-bold text-warning">
+                                    <%= camp.title %>
+                                </h3>
+                                <p class="text-light opacity-75">
+                                    <%= camp.subtitle %>
+                                </p>
+                                <a href="/campaigns/<%= camp.urlId %>"
+                                    class="btn btn-outline-light w-100 mt-3 fw-bold">KAMPANYAYI İNCELE <i
+                                        class="fa-solid fa-arrow-right ms-2"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

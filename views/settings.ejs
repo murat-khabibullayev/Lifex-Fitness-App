@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Uygulama Ayarları - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-settings-page">
+
+    <%- include('partials/navbar') %>
+
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+
+                    <h3 class="fw-bold mb-4 d-flex justify-content-between align-items-center">Uygulama Ayarları
+                        <a href="#" onclick="history.back(); return false;" class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-arrow-left me-2"></i> Geri Dön
+                        </a>
+                    </h3>
+
+                    <!-- GÖRÜNÜM AYARLARI -->
+                    <div class="card shadow border-0 rounded-3 mb-4">
+                        <div class="card-header bg-transparent fw-bold py-3">Görünüm</div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                    <div>
+                                        <strong>Karanlık Mod (Dark Mode)</strong>
+                                        <small class="d-block text-muted">Göz yormayan koyu tema</small>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- BİLDİRİM AYARLARI -->
+                    <div class="card shadow border-0 rounded-3 mb-4">
+                        <div class="card-header bg-transparent fw-bold py-3">Bildirimler</div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                    <div>
+                                        <strong>E-Posta Bülteni</strong>
+                                        <small class="d-block text-muted">Haftalık gelişim raporu al</small>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" checked>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- DİĞER -->
+                    <div class="card shadow border-0 rounded-3">
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item p-3 action-link">
+                                    <a href="/features" class="text-decoration-none text-dark d-block">Proje
+                                        Özellikleri / Demo Sayfası</a>
+                                </li>
+                                <li class="list-group-item p-3 action-link">
+                                    <a href="/support" class="text-decoration-none text-danger d-block">Hata Bildir</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GECE MODU JAVASCRIPT KODU (LOCALSTORAGE) -->
+        <script>
+            const toggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+
+            // Sayfa açıldığında anahtarın (switch) durumunu ayarla
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                toggle.checked = true;
+            }
+
+            // Kullanıcı butona basınca
+            toggle.addEventListener('change', () => {
+                if (toggle.checked) {
+                    // Aç
+                    body.classList.add('dark-mode');
+                    localStorage.setItem('darkMode', 'enabled');
+                } else {
+                    // Kapat
+                    body.classList.remove('dark-mode');
+                    localStorage.setItem('darkMode', 'disabled');
+                }
+            });
+        </script>
+
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

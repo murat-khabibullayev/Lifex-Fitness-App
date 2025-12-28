@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>İçerik Yönetimi - Admin</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="admin-page">
+
+    <%- include('../partials/admin-sidebar') %>
+
+        <div class="admin-content" id="mainContent">
+
+            <%- include('../partials/admin-navbar') %>
+
+                <h2 class="fw-bold text-dark m-3">İçerik Yönetimi</h2>
+
+                <!-- SEKMELER (SADECE BAŞLIKLAR) -->
+                <ul class="nav nav-tabs m-3" id="contentTab" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active fw-bold" id="food-tab" data-bs-toggle="tab"
+                            data-bs-target="#food-content">
+                            <i class="fa-solid fa-utensils me-2"></i> Yemekler (<%= foods.length %>)
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link fw-bold" id="campaign-tab" data-bs-toggle="tab"
+                            data-bs-target="#campaign-content">
+                            <i class="fa-solid fa-bullhorn me-2"></i> Kampanyalar (<%= campaigns.length %>)
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link fw-bold" id="plan-tab" data-bs-toggle="tab"
+                            data-bs-target="#plan-content">
+                            <i class="fa-solid fa-gem me-2"></i> Üyelik Paketleri (<%= plans.length %>)
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content m-3">
+
+                    <!-- 1. YEMEK YÖNETİMİ -->
+                    <div class="tab-pane fade show active" id="food-content">
+                        <div class="d-flex justify-content-end mb-3">
+                            <button class="btn btn-success fw-bold" data-bs-toggle="modal"
+                                data-bs-target="#addFoodModal">
+                                <i class="fa-solid fa-plus me-2"></i> Yeni Yemek Ekle
+                            </button>
+                        </div>
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-0">
+                                <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+                                    <table class="table table-dark table-hover align-middle mb-0">
+                                        <thead class="table-dark sticky-top">
+                                            <tr>
+                                                <th class="ps-4">Görsel</th>
+                                                <th>Yemek Adı</th>
+                                                <th>Kalori</th>
+                                                <th>Makrolar (K/P/Y)</th>
+                                                <th class="text-end pe-4">İşlem</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% foods.forEach(food=> { %>
+                                                <tr>
+                                                    <td class="ps-4"><img src="<%= food.image %>" class="food-img"></td>
+                                                    <td class="fw-bold">
+                                                        <%= food.name %>
+                                                    </td>
+                                                    <td><span class="badge bg-warning text-dark">
+                                                            <%= food.calories %> kcal
+                                                        </span></td>
+                                                    <td class="small text-muted">
+                                                        <%= food.carbs %>g / <%= food.protein %>g / <%= food.fat %>g
+                                                    </td>
+                                                    <td class="text-end pe-4">
+                                                        <form action="/admin/food/delete" method="POST"
+                                                            onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
+                                                            <input type="hidden" name="foodId" value="<%= food._id %>">
+                                                            <button class="btn btn-sm btn-outline-danger"><i
+                                                                    class="fa-solid fa-trash"></i></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. KAMPANYA YÖNETİMİ -->
+                    <div class="tab-pane fade" id="campaign-content">
+                        <div class="d-flex justify-content-end mb-3">
+                            <button class="btn btn-primary fw-bold" data-bs-toggle="modal"
+                                data-bs-target="#addCampaignModal">
+                                <i class="fa-solid fa-plus me-2"></i> Yeni Kampanya Ekle
+                            </button>
+                        </div>
+                        <div class="row g-4">
+                            <% campaigns.forEach(camp=> { %>
+                                <div class="col-md-6">
+                                    <div class="card h-100 shadow-sm">
+                                        <img src="<%= camp.image %>" class="card-img-top"
+                                            style="height: 200px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">
+                                                <%= camp.title %>
+                                            </h5>
+                                            <p class="card-text text-muted small">
+                                                <%= camp.subtitle %>
+                                            </p>
+                                            <form action="/admin/campaign/delete" method="POST"
+                                                onsubmit="return confirm('Bu kampanyayı kaldırmak istiyor musunuz?');">
+                                                <input type="hidden" name="campaignId" value="<%= camp._id %>">
+                                                <button class="btn btn-sm btn-danger w-100">Kaldır</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }) %>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- 3. ÜYELİK PAKETLERİ YÖNETİMİ -->
+                <div class="tab-pane fade" id="plan-content">
+                    <div class="d-flex justify-content-end mb-3">
+                        <button class="btn btn-warning fw-bold text-dark" data-bs-toggle="modal"
+                            data-bs-target="#addPlanModal">
+                            <i class="fa-solid fa-plus me-2"></i> Yeni Paket Ekle
+                        </button>
+                    </div>
+
+                    <div class="row g-4">
+                        <% plans.forEach(plan=> { %>
+                            <div class="col-md-4">
+                                <div class="card h-100 shadow-sm border-secondary position-relative">
+
+                                    <% if(plan.isPopular) { %>
+                                        <span
+                                            class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-warning text-dark border border-light">EN
+                                            POPÜLER 🔥</span>
+                                        <% } %>
+
+                                            <!-- FLEX YAPISI -->
+                                            <div class="card-body text-center p-4 d-flex flex-column">
+
+                                                <!-- ÜST KISIM (İÇERİK) -->
+                                                <div class="mb-auto">
+                                                    <h5 class="fw-bold <%= plan.colorClass %>">
+                                                        <%= plan.name %>
+                                                    </h5>
+                                                    <h2 class="display-6 fw-bold my-3">
+                                                        <%= plan.price %>₺
+                                                    </h2>
+                                                    <span class="badge bg-secondary mb-3">
+                                                        <%= plan.durationMonths %> Ay
+                                                    </span>
+
+                                                    <ul
+                                                        class="list-unstyled text-start small text-muted border-top border-secondary pt-3">
+                                                        <% plan.features.forEach(feat=> { %>
+                                                            <li class="mb-1"><i
+                                                                    class="fa-solid fa-check text-success me-2"></i>
+                                                                <%= feat %>
+                                                            </li>
+                                                            <% }) %>
+                                                    </ul>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <!-- DÜZENLEME BUTONU (YENİ) -->
+                                                    <button class="btn btn-sm btn-outline-info w-100 mb-2" onclick="openEditPlanModal(
+                                    '<%= plan._id %>', 
+                                    '<%= plan.name %>', 
+                                    '<%= plan.price %>', 
+                                    '<%= plan.durationMonths %>', 
+                                    '<%= plan.features.join(', ') %>', 
+                                    '<%= plan.colorClass %>', 
+                                    <%= plan.isPopular %>
+                                )">
+                                                        <i class="fa-solid fa-pen-to-square"></i> Düzenle
+                                                    </button>
+
+                                                    <!-- SİLME BUTONU -->
+                                                    <form action="/admin/plan/delete" method="POST"
+                                                        onsubmit="return confirm('Bu paketi silmek istediğinize emin misiniz?');">
+                                                        <input type="hidden" name="planId" value="<%= plan._id %>">
+                                                        <button class="btn btn-sm btn-outline-danger w-100"><i
+                                                                class="fa-solid fa-trash"></i> Paketi Sil</button>
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                </div>
+        </div>
+
+        <!-- MODAL: YEMEK EKLE -->
+        <div class="modal fade" id="addFoodModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white border-secondary">
+                    <div class="modal-header border-secondary">
+                        <h5 class="modal-title fw-bold">Yeni Yemek Ekle</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/food/add" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Yemek Adı</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-6"><input type="number" name="calories" class="form-control"
+                                        placeholder="Kalori" required></div>
+                                <div class="col-6">
+                                    <select name="type" class="form-select">
+                                        <option value="main">Ana Yemek</option>
+                                        <option value="breakfast">Kahvaltılık</option>
+                                        <option value="snack">Atıştırmalık</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-4"><input type="number" name="carbs" class="form-control"
+                                        placeholder="Karb"></div>
+                                <div class="col-4"><input type="number" name="protein" class="form-control"
+                                        placeholder="Prot"></div>
+                                <div class="col-4"><input type="number" name="fat" class="form-control"
+                                        placeholder="Yağ"></div>
+                                <div class="col-4"><input type="number" name="cholesterol" class="form-control"
+                                        placeholder="Kolesterol"></div>
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-6"><input type="number" name="fiber" class="form-control"
+                                        placeholder="Lif (Opsiyonel)"></div>
+                                <div class="col-6"><input type="number" name="sugar" class="form-control"
+                                        placeholder="Şeker (Opsiyonel)"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Resim URL</label>
+                                <input type="text" name="image" class="form-control" placeholder="/images...">
+                            </div>
+                            <button type="submit" class="btn btn-success w-100 fw-bold">KAYDET</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL: KAMPANYA EKLE -->
+        <div class="modal fade" id="addCampaignModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content bg-dark text-white border-secondary">
+                    <div class="modal-header border-secondary">
+                        <h5 class="modal-title fw-bold">Yeni Kampanya Oluştur</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/campaign/add" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Kampanya Başlığı</label>
+                                <input type="text" name="title" class="form-control" placeholder="Örn: Yaz İndirimi"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Alt Başlık (Kartta görünür)</label>
+                                <input type="text" name="subtitle" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Detaylı Açıklama</label>
+                                <textarea name="description" class="form-control" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Koşullar (Virgülle ayırın)</label>
+                                <input type="text" name="conditions" class="form-control"
+                                    placeholder="Sadece yeni üyeler, 12 ay taahhüt, ...">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Kapak Resmi URL</label>
+                                <input type="text" name="image" class="form-control" placeholder="https://..." required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 fw-bold">OLUŞTUR</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- MODAL: YENİ PAKET EKLE -->
+        <div class="modal fade" id="addPlanModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold">Yeni Üyelik Paketi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/plan/add" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Paket Adı</label>
+                                <input type="text" name="name" class="form-control" placeholder="Örn: SÜPER FIRSAT"
+                                    required>
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label">Fiyat (TL)</label>
+                                    <input type="number" name="price" class="form-control" required>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">Süre (Ay)</label>
+                                    <input type="number" name="durationMonths" class="form-control" placeholder="Örn: 3"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Özellikler (Virgülle ayırın)</label>
+                                <textarea name="features" class="form-control" rows="3"
+                                    placeholder="Havuz, Spa, Grup Dersleri..."></textarea>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label">Renk Teması</label>
+                                    <select name="colorClass" class="form-select">
+                                        <option value="text-white">Beyaz (Standart)</option>
+                                        <option value="text-warning">Sarı (Fırsat)</option>
+                                        <option value="text-info">Mavi (Pro)</option>
+                                        <option value="text-danger">Kırmızı (VIP)</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 d-flex align-items-end">
+                                    <div class="form-check form-switch mb-2 ms-2">
+                                        <input class="form-check-input" type="checkbox" name="isPopular" id="popCheck">
+                                        <label class="form-check-label" for="popCheck">Popüler Etiketi</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning w-100 fw-bold text-dark">KAYDET</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- MODAL: PAKET DÜZENLE -->
+        <div class="modal fade" id="editPlanModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold">Paketi Düzenle</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/plan/update" method="POST">
+                            <input type="hidden" name="planId" id="editPlanId">
+
+                            <div class="mb-3">
+                                <label class="form-label">Paket Adı</label>
+                                <input type="text" name="name" id="editPlanName" class="form-control" required>
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label">Fiyat (TL)</label>
+                                    <input type="number" name="price" id="editPlanPrice" class="form-control" required>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">Süre (Ay)</label>
+                                    <input type="number" name="durationMonths" id="editPlanDuration"
+                                        class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Özellikler (Virgülle ayırın)</label>
+                                <textarea name="features" id="editPlanFeatures" class="form-control"
+                                    rows="3"></textarea>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label">Renk Teması</label>
+                                    <select name="colorClass" id="editPlanColor" class="form-select">
+                                        <option value="text-white">Beyaz</option>
+                                        <option value="text-warning">Sarı</option>
+                                        <option value="text-info">Mavi</option>
+                                        <option value="text-danger">Kırmızı</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 d-flex align-items-end">
+                                    <div class="form-check form-switch mb-2 ms-2">
+                                        <input class="form-check-input" type="checkbox" name="isPopular"
+                                            id="editPlanPopular">
+                                        <label class="form-check-label" for="editPlanPopular">Popüler</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-info w-100 fw-bold text-dark">GÜNCELLE</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCRIPT: MODAL DOLDURMA -->
+        <script>
+            function openEditPlanModal(id, name, price, duration, features, color, popular) {
+                document.getElementById('editPlanId').value = id;
+                document.getElementById('editPlanName').value = name;
+                document.getElementById('editPlanPrice').value = price;
+                document.getElementById('editPlanDuration').value = duration;
+                document.getElementById('editPlanFeatures').value = features;
+                document.getElementById('editPlanColor').value = color;
+                document.getElementById('editPlanPopular').checked = popular; // true/false
+
+                new bootstrap.Modal(document.getElementById('editPlanModal')).show();
+            }
+        </script>
+        <script src="/js/sideBar.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

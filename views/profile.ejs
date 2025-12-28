@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Profilim - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-profile-page">
+
+    <%- include('partials/navbar') %>
+
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+
+                    <!-- PROFİL KARTI -->
+                    <div class="card shadow border-0 rounded-3">
+                        <div class="card-body p-5">
+                            <div class="row align-items-center">
+
+                                <!-- Sol Taraf: Avatar ve İsim -->
+                                <div class="col-md-4 text-center border-end">
+                                    <!-- Profil Resmi (Şimdilik sabit bir resim veya baş harf) -->
+                                    <div class="bg-primary text-white rounded-circle overflow-hidden d-flex align-items-center justify-content-center mx-auto mb-3"
+                                        style="width: 100px; height: 100px; font-size: 40px;">
+                                        <% if (user.profileImage) { %>
+                                            <img src="<%= user.profileImage %>" class="w-100 h-100 object-fit-cover">
+                                            <% } else { %>
+                                                <span class="text-warning fw-bold" style="font-size: 50px;">
+                                                    <%= user.fullName.charAt(0).toUpperCase() %>
+                                                </span>
+                                                <% } %>
+                                    </div>
+                                    <h4 class="fw-bold">
+                                        <%= user.fullName %>
+                                    </h4>
+                                    <span class="badge bg-secondary">
+                                        <%= user.email %>
+                                    </span>
+                                </div>
+
+                                <!-- Sağ Taraf: Detaylı Bilgiler -->
+                                <div class="col-md-8 ps-md-5 mt-4 mt-md-0">
+                                    <h5 class="text-muted border-bottom pb-2">Vücut Bilgileri</h5>
+                                    <div class="row mb-3">
+                                        <div class="col-4">
+                                            <small class="text-muted d-block">Yaş</small>
+                                            <strong>
+                                                <%= user.age %>
+                                            </strong>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-muted d-block">Boy</small>
+                                            <strong>
+                                                <%= user.height %> cm
+                                            </strong>
+                                        </div>
+                                        <div class="col-4">
+                                            <small class="text-muted d-block">Kilo</small>
+                                            <strong>
+                                                <%= user.weight %> kg
+                                            </strong>
+                                        </div>
+                                    </div>
+
+                                    <h5 class="text-muted border-bottom pb-2 pt-2">Hedef ve Durum</h5>
+                                    <p class="mb-1">
+                                        Hedef:
+                                        <span class="fw-bold text-primary">
+                                            <% if(user.goal==='lose' ) { %> Kilo Vermek <% } %>
+                                                    <% if(user.goal==='gain' ) { %> Kilo Almak <% } %>
+                                                            <% if(user.goal==='maintain' ) { %> Formu Korumak <% } %>
+                                        </span>
+                                    </p>
+                                    <p>
+                                        Günlük Kalori İhtiyacı:
+                                        <span class="badge bg-success fs-6">
+                                            <%= user.dailyCalories %> kcal
+                                        </span>
+                                    </p>
+
+                                    <!-- BUTONLAR -->
+                                    <div class="mt-4">
+                                        <!-- Düzenleme Sayfasına Giden Buton -->
+                                        <a href="/edit-profile" class="btn btn-outline-primary me-2">✏️ Profili
+                                            Düzenle</a>
+
+                                        <!-- Panele Dön -->
+                                        <a href="/dashboard/<%= user._id %>" class="btn btn-dark">Panele Git</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

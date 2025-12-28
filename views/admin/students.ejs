@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Öğrenci Yönetimi - Admin</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="admin-page">
+
+    <%- include('../partials/admin-sidebar') %>
+
+        <div class="admin-content" id="mainContent">
+
+            <%- include('../partials/admin-navbar') %>
+
+                <h2 class="fw-bold text-dark m-3">Üye Listesi</h2>
+
+                <div class="card border-0 shadow-sm m-3">
+                    <div class="card-body p-0">
+                        <table class="table table-dark table-hover align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="ps-4">Ad Soyad</th>
+                                    <th>Üyelik Tipi</th>
+                                    <th>Durum</th>
+                                    <th>Kayıt Tarihi</th>
+                                    <th class="text-end pe-4">İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(students.length===0) { %>
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-muted">Henüz kayıtlı üye yok.</td>
+                                    </tr>
+                                    <% } %>
+
+                                        <% students.forEach(student=> { %>
+                                            <tr>
+                                                <!-- 1. İsim ve Email -->
+                                                <td class="ps-4">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold text-white"
+                                                            style="width: 40px; height: 40px;">
+                                                            <%= student.fullName.charAt(0).toUpperCase() %>
+                                                        </div>
+                                                        <div>
+                                                            <span class="d-block fw-bold">
+                                                                <%= student.fullName %>
+                                                            </span>
+                                                            <small class="text-muted">
+                                                                <%= student.email %>
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <!-- 2. Üyelik Tipi -->
+                                                <td>
+                                                    <% if(student.role==='student' && student.membership &&
+                                                        student.membership.planName) { %>
+                                                        <span class="fw-bold text-muted">
+                                                            <%= student.membership.planName %>
+                                                        </span>
+                                                        <% } else { %>
+                                                            <span class="text-muted">-</span>
+                                                            <% } %>
+                                                </td>
+
+                                                <!-- 3. Durum (Rozetler) -->
+                                                <td>
+                                                    <% if(student.role==='student' ) { %>
+                                                        <span class="badge bg-success">Aktif Üye</span>
+                                                        <% } else { %>
+                                                            <span class="badge bg-secondary">Potansiyel (Üye
+                                                                Değil)</span>
+                                                            <% } %>
+                                                </td>
+
+                                                <!-- 4. Tarih -->
+                                                <td>
+                                                    <%= new Date(student.createdAt).toLocaleDateString('tr-TR') %>
+                                                </td>
+
+                                                <!-- 5. Silme Butonu -->
+                                                <td class="text-end pe-4">
+                                                    <form action="/admin/students/delete" method="POST"
+                                                        onsubmit="return confirm('Bu kullanıcıyı ve tüm verilerini silmek istediğinize emin misiniz?');">
+                                                        <input type="hidden" name="studentId"
+                                                            value="<%= student._id %>">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            <i class="fa-solid fa-trash"></i> Sil
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+        </div>
+        <script src="/js/sideBar.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

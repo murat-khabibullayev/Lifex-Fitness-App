@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>
+        <%= campaign.title %> - LIFEX
+    </title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-dark text-white" style="padding-top: 100px;">
+
+    <%- include('partials/navbar') %>
+
+        <div class="container">
+            <!-- Geri Dön Butonu -->
+            <div class="d-flex justify-content-end mb-4">
+                <a href="/campaigns" class="btn btn-outline-secondary">&larr; Kampanyalara Dön</a>
+            </div>
+
+            <div class="row align-items-center">
+                <!-- Sol: Resim -->
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <img src="<%= campaign.image %>" class="img-fluid rounded-3 shadow-lg border border-secondary"
+                        alt="<%= campaign.title %>">
+                </div>
+
+                <!-- Sağ: İçerik -->
+                <div class="col-lg-6 ps-lg-5">
+                    <span class="badge bg-danger mb-3 px-3 py-2">Sınırlı Süre</span>
+                    <h1 class="display-4 fw-bold text-white mb-4">
+                        <%= campaign.title %>
+                    </h1>
+                    <p class="lead text-light opacity-75 mb-4">
+                        <%= campaign.description %>
+                    </p>
+
+                    <div class="card bg-secondary bg-opacity-10 border-warning mb-4">
+                        <div class="card-header border-warning bg-transparent text-warning fw-bold">
+                            <i class="fa-solid fa-circle-exclamation me-2"></i> Kampanya Koşulları
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <% campaign.conditions.forEach(cond=> { %>
+                                <li class="list-group-item bg-transparent text-white border-secondary">
+                                    <i class="fa-solid fa-check text-success me-2"></i>
+                                    <%= cond %>
+                                </li>
+                                <% }) %>
+                        </ul>
+                    </div>
+
+                    <div class="mt-5">
+                        <!-- DURUM 1: GİRİŞ YAPMAMIŞ (MİSAFİR) -->
+                        <% if (!user) { %>
+                            <div class="alert alert-dark border-secondary">
+                                <i class="fa-solid fa-lock me-2"></i> Bu fırsattan yararlanmak için üye olmalısınız.
+                            </div>
+                            <!-- Kayıt olduktan sonra BU SAYFAYA (campaigns/id) geri dönsün -->
+                            <a href="/register?returnTo=/campaigns/<%= campaign.urlId %>"
+                                class="btn btn-warning btn-lg w-100 fw-bold text-dark">
+                                ÜYE OL
+                            </a>
+
+                            <!-- DURUM 2: GİRİŞ YAPMIŞ KULLANICI -->
+                            <% } else { %>
+
+                                <!-- İndirimi Uygulama Formu -->
+                                <form action="/apply-discount" method="POST">
+                                    <input type="hidden" name="campaignType" value="<%= campaign.urlId %>">
+
+                                    <button type="submit"
+                                        class="btn btn-success btn-lg w-100 fw-bold text-white shadow-lg transform-scale">PAKET
+                                        SEÇ VE İNDİRİMDEN YARARLAN
+                                    </button>
+                                </form>
+                                <p class="text-secondary text-center mt-2 small">Butona tıkladığınızda indirim
+                                    hesabınıza tanımlanacaktır.</p>
+
+                                <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

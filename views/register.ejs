@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="bg-auth-page">
+
+    <!-- NAVBAR ÇAĞIRMA -->
+    <%- include('partials/navbar') %>
+
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+
+                    <!-- Form Başlangıcı (Tek Form) -->
+                    <form action="/register" method="POST" id="registerForm">
+
+                        <!-- FLIP CONTAINER -->
+                        <div class="flip-container" id="flipCard">
+                            <div class="flipper">
+
+                                <!-- === ÖN YÜZ (ADIM 1 - ZORUNLU) === -->
+                                <div class="front">
+                                    <div class="card shadow-lg border-0 h-100">
+                                        <div class="card-header bg-transparent text-center py-4 border-0">
+                                            <h3 class="fw-bold text-white">Hesap Oluştur</h3>
+                                            <p class="text-white-50 mb-0">Adım 1/2: Temel Bilgiler</p>
+                                        </div>
+                                        <div class="card-body p-4">
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Ad Soyad</label>
+                                                <input type="text" name="fullName" id="inpName" class="form-control"
+                                                    placeholder="Adınız Soyadınız" required>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">E-Posta</label>
+                                                <input type="email" name="email" id="inpEmail" class="form-control"
+                                                    placeholder="mail@ornek.com" required>
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <label class="form-label">Şifre</label>
+                                                <input type="password" name="password" id="inpPass" class="form-control"
+                                                    required>
+                                            </div>
+
+                                            <!-- İLERLE BUTONU (Type button, submit değil) -->
+                                            <button type="button" class="btn btn-warning w-100 py-3 fw-bold fs-5 mb-3"
+                                                onclick="goToStep2()">
+                                                İLERLE <i class="fa-solid fa-arrow-right ms-2"></i>
+                                            </button>
+
+                                            <div class="text-center">
+                                                <small class="text-muted">Zaten hesabın var mı? <a href="/login"
+                                                        class="text-warning text-decoration-none">Giriş Yap</a></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- === ARKA YÜZ (ADIM 2 - DETAYLI & OPSİYONEL) === -->
+                                <div class="back">
+                                    <div class="card shadow-lg border-0 h-100 overflow-auto"> <!-- Scroll eklendi -->
+                                        <div class="card-header bg-transparent text-center py-3 border-0">
+                                            <h4 class="fw-bold text-white">Vücut Analizi</h4>
+                                            <p class="text-white-50 mb-0 small">Daha doğru sonuçlar için doldurun</p>
+                                        </div>
+                                        <div class="card-body p-4">
+
+                                            <!-- Temel Fiziksel -->
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-6">
+                                                    <label class="small">Cinsiyet</label>
+                                                    <select name="gender"
+                                                        class="form-select bg-dark text-white border-secondary">
+                                                        <option value=" " selected disabled>Cinsiyet Seçiniz</option>
+                                                        <option value="male">Erkek</option>
+                                                        <option value="female">Kadın</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="small">Yaş</label>
+                                                    <input type="number" name="age" class="form-control"
+                                                        placeholder="25">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="small">Boy (cm)</label>
+                                                    <input type="number" name="height" class="form-control"
+                                                        placeholder="180">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="small">Kilo (kg)</label>
+                                                    <input type="number" name="weight" class="form-control"
+                                                        placeholder="75">
+                                                </div>
+                                            </div>
+
+                                            <!-- Detaylı Ölçüler -->
+                                            <h6 class="text-warning border-bottom border-secondary pb-1 mb-2">Çevre
+                                                Ölçüleri (cm)</h6>
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-6"><input type="number" name="neck" class="form-control"
+                                                        placeholder="Boyun"></div>
+                                                <div class="col-6"><input type="number" name="chest"
+                                                        class="form-control" placeholder="Göğüs"></div>
+                                                <div class="col-6"><input type="number" name="waist"
+                                                        class="form-control" placeholder="Bel"></div>
+                                                <div class="col-6"><input type="number" name="hip" class="form-control"
+                                                        placeholder="Kalça"></div>
+                                            </div>
+
+                                            <!-- Hedefler -->
+                                            <div class="mb-3">
+                                                <select name="goal"
+                                                    class="form-select bg-dark text-white border-secondary">
+                                                    <option value="" selected disabled>Hedef Seçiniz</option>
+                                                    <option value="maintain">Formu Koru</option>
+                                                    <option value="lose">Kilo Ver</option>
+                                                    <option value="gain">Kilo Al / Kas Yap</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-4">
+                                                <select name="activityLevel"
+                                                    class="form-select bg-dark text-white border-secondary">
+                                                    <option value="1.2" selected disabled>Aktivite Seçiniz</option>
+                                                    <option value="1.2">Hareketsiz</option>
+                                                    <option value="1.375">Az Hareketli</option>
+                                                    <option value="1.55">Orta Hareketli</option>
+                                                    <option value="1.725">Çok Hareketli</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- AKSİYON BUTONLARI -->
+                                            <div class="d-flex gap-2">
+                                                <button type="submit" class="btn btn-outline-light w-50">ŞİMDİLİK
+                                                    ATLA</button>
+                                                <button type="submit" class="btn btn-success w-50 fw-bold">KAYDI
+                                                    TAMAMLA</button>
+                                            </div>
+
+                                            <!-- Geri Dön Butonu (Hata yaparsa diye) -->
+                                            <div class="text-center mt-2">
+                                                <a href="#" onclick="goBackStep1()"
+                                                    class="text-secondary small text-decoration-none">Geri Dön</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+
+            <!-- KART DÖNDÜRME MANTIĞI -->
+            <script src="/js/register.js"></script>
+</body>
+
+</html>

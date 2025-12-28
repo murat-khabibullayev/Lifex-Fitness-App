@@ -1,0 +1,65 @@
+<!-- FOOTER -->
+<footer class="main-footer pt-5 pb-3 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h4 class="fw-bold mb-3">LIFEX</h4>
+                <p class="text-secondary">Teknolojinin gücüyle sağlıklı yaşam standartlarını yükseltiyoruz.
+                    Bilinçli spor, bilimsel beslenme.</p>
+            </div>
+            <div class="col-md-2 mb-4">
+                <h6 class="text-warning fw-bold">Hızlı Linkler</h6>
+                <ul class="list-unstyled text-secondary">
+                    <li><a href="/" class="text-decoration-none text-secondary hover-white">Ana Sayfa</a></li>
+                    <% if (typeof user=='undefined' && !user) { %>
+                        <li><a href="/login" class="text-decoration-none text-secondary hover-white">Giriş Yap</a>
+                        </li>
+                        <li><a href="/register" class="text-decoration-none text-secondary hover-white">Kayıt Ol</a>
+                        </li>
+                        <% } %>
+                </ul>
+            </div>
+            <div class="col-md-2 mb-4">
+                <h6 class="text-warning fw-bold">Destek</h6>
+                <ul class="list-unstyled text-secondary">
+                    <li><a href="#" class="text-decoration-none text-secondary hover-white">SSS</a></li>
+                    <li><a href="#" class="text-decoration-none text-secondary hover-white">İletişim</a></li>
+                    <li><a href="#" class="text-decoration-none text-secondary hover-white">Gizlilik</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h6 class="text-warning fw-bold">Bülten</h6>
+                <p class="text-secondary small">Gelişmelerden haberdar olmak için e-posta adresini bırak.</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control bg-dark border-secondary text-white" placeholder="E-Posta">
+                    <button class="btn btn-primary" type="button">Abone Ol</button>
+                </div>
+            </div>
+        </div>
+        <hr class="border-secondary">
+        <div class="text-center text-secondary small">
+            &copy; 2025 Lifex Proje. Tüm Hakları Saklıdır. | Designed by Murat
+        </div>
+    </div>
+    <!-- views/partials/footer.ejs EN ALTI -->
+
+    <script>
+        // Sayfada 'custom-alert' sınıfına sahip bir kutu var mı diye bakar
+        const alertBox = document.querySelector('.custom-alert');
+
+        if (alertBox) {
+            // Varsa, 4 saniye bekle
+            setTimeout(() => {
+                // Önce yavaşça görünmez yap (Opaklık 0)
+                alertBox.style.transition = "opacity 0.5s ease";
+                alertBox.style.opacity = "0";
+
+                // Efekt bitince (0.5 sn sonra) tamamen sil
+                setTimeout(() => {
+                    alertBox.remove();
+                }, 500);
+
+            }, 4000); // 4000 milisaniye = 4 Saniye
+        }
+    </script>
+</footer>

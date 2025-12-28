@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Öğrenci Yönetimi - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+    <style>
+        /* Modal içindeki minik dashboard kutuları */
+        .mini-stat-box {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .mini-stat-label {
+            font-size: 10px;
+            color: #aaa;
+            display: block;
+        }
+
+        .mini-stat-val {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="bg-coach" style="padding-top: 100px;">
+
+    <%- include('partials/navbar') %>
+
+        <!-- FLASH MESAJ (Z-Index artırıldı ki kesin görünsün) -->
+        <% if (typeof alert !=='undefined' && alert) { %>
+            <div class="custom-alert slide-in-right">
+                <div class="d-flex align-items-center justify-content-between">
+                    <span>
+                        <%= alert.message %>
+                    </span>
+                    <button type="button" class="btn-close btn-close-white ms-3"
+                        onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            </div>
+            <% } %>
+
+                <div class="container pb-5">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fw-bold text-white"><i class="fa-solid fa-users-gear me-2 text-info"></i> Öğrenci
+                            Yönetimi</h2>
+                        <a href="/coach-dashboard" class="btn btn-outline-light">Panele Dön</a>
+                    </div>
+
+                    <div class="card shadow-lg border-0"
+                        style="background-color: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-dark table-hover mb-0 align-middle">
+                                    <thead>
+                                        <tr class="text-secondary">
+                                            <th>Ad Soyad</th>
+                                            <th>Fiziksel</th>
+                                            <th>Mevcut Hedef</th>
+                                            <th>Kalori</th>
+                                            <th class="text-end">İşlem</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% students.forEach(student=> { %>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2 fw-bold text-white"
+                                                            style="width: 40px; height: 40px;">
+                                                            <%= student.fullName.charAt(0).toUpperCase() %>
+                                                        </div>
+                                                        <div>
+                                                            <span class="d-block fw-bold">
+                                                                <%= student.fullName %>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <%= student.weight %> kg / <%= student.height %> cm
+                                                </td>
+                                                <td>
+                                                    <% if(student.goal==='lose' ) { %> <span
+                                                            class="badge bg-warning text-dark">Kilo Ver</span>
+                                                        <% } %>
+                                                            <% if(student.goal==='gain' ) { %> <span
+                                                                    class="badge bg-info text-dark">Kilo Al</span>
+                                                                <% } %>
+                                                                    <% if(student.goal==='maintain' ) { %> <span
+                                                                            class="badge bg-success">Koru</span>
+                                                                        <% } %>
+                                                </td>
+                                                <td>
+                                                    <%= student.dailyCalories %> kcal
+                                                </td>
+                                                <td class="text-end">
+                                                    <!-- TÜM VERİLERİ FONKSİYONA GÖNDERİYORUZ -->
+                                                    <button class="btn btn-sm btn-outline-warning" onclick="openAnalysisModal(
+                                                '<%= student._id %>', 
+                                                '<%= student.fullName %>', 
+                                                '<%= student.goal %>', 
+                                                '<%= student.bmr %>', 
+                                                '<%= student.tdee %>', 
+                                                '<%= student.analysis.bodyFat %>', 
+                                                '<%= student.analysis.waterNeed %>', 
+                                                '<%= student.analysis.idealWeight %>'
+                                            )">
+                                                        <i class="fa-solid fa-chart-pie me-1"></i> Analiz & Düzenle
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- YENİ MODAL (MİNİ DASHBOARD) -->
+                <div class="modal fade" id="analysisModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content bg-dark text-white border-secondary">
+                            <div class="modal-header border-secondary">
+                                <h5 class="modal-title">Öğrenci Analizi: <span id="mName"
+                                        class="text-warning fw-bold"></span></h5>
+                                <button type="button" class="btn-close btn-close-white"
+                                    data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <!-- MİNİ DASHBOARD GÖRÜNÜMÜ -->
+                                <h6 class="text-secondary border-bottom border-secondary pb-2 mb-3">Mevcut Durum</h6>
+                                <div class="row g-2 mb-4">
+                                    <!-- BMR -->
+                                    <div class="col-4">
+                                        <div class="mini-stat-box">
+                                            <span class="mini-stat-label">BMR</span>
+                                            <span class="mini-stat-val text-primary" id="mBmr">0</span>
+                                        </div>
+                                    </div>
+                                    <!-- TDEE -->
+                                    <div class="col-4">
+                                        <div class="mini-stat-box">
+                                            <span class="mini-stat-label">TDEE</span>
+                                            <span class="mini-stat-val text-success" id="mTdee">0</span>
+                                        </div>
+                                    </div>
+                                    <!-- Yağ Oranı -->
+                                    <div class="col-4">
+                                        <div class="mini-stat-box">
+                                            <span class="mini-stat-label">Yağ %</span>
+                                            <span class="mini-stat-val text-danger" id="mFat">%0</span>
+                                        </div>
+                                    </div>
+                                    <!-- Su -->
+                                    <div class="col-6">
+                                        <div class="mini-stat-box">
+                                            <span class="mini-stat-label">Su İhtiyacı</span>
+                                            <span class="mini-stat-val text-info" id="mWater">0 Lt</span>
+                                        </div>
+                                    </div>
+                                    <!-- İdeal Kilo -->
+                                    <div class="col-6">
+                                        <div class="mini-stat-box">
+                                            <span class="mini-stat-label">İdeal Kilo</span>
+                                            <span class="mini-stat-val text-warning" id="mIdeal">0 kg</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- DÜZENLEME FORMU (SADECE HEDEF) -->
+                                <form action="/coach/update-student" method="POST">
+                                    <input type="hidden" name="studentId" id="mId">
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-warning fw-bold"><i
+                                                class="fa-solid fa-bullseye me-2"></i> Yeni Hedef Belirle</label>
+                                        <select name="goal" id="mGoal"
+                                            class="form-select bg-dark text-white border-warning">
+                                            <option value="lose">Kilo Vermek (Yağ Yakımı)</option>
+                                            <option value="gain">Kilo Almak (Kas İnşası)</option>
+                                            <option value="maintain">Formu Korumak</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="alert alert-info bg-transparent border-info text-info small py-2">
+                                        <i class="fa-solid fa-info-circle me-1"></i> Sadece hedefi değiştirebilirsiniz.
+                                        Kilo ve ölçüm bilgileri öğrenci tarafından girilmelidir.
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="submit"
+                                            class="btn btn-warning fw-bold text-dark">GÜNCELLE</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('partials/footer') %>
+                    <script src="/js/bootstrap.bundle.min.js"></script>
+
+                    <!-- SCRIPT -->
+                    <script>
+                        function openAnalysisModal(id, name, goal, bmr, tdee, fat, water, ideal) {
+                            // ID ve Hedef (Form İçin)
+                            document.getElementById('mId').value = id;
+                            document.getElementById('mName').innerText = name;
+                            document.getElementById('mGoal').value = goal;
+
+                            // Analiz Kutuları (Görünüm İçin)
+                            document.getElementById('mBmr').innerText = bmr;
+                            document.getElementById('mTdee').innerText = tdee;
+                            document.getElementById('mFat').innerText = '%' + fat;
+                            document.getElementById('mWater').innerText = water + ' Lt';
+                            document.getElementById('mIdeal').innerText = ideal + ' kg';
+
+                            new bootstrap.Modal(document.getElementById('analysisModal')).show();
+                        }
+                    </script>
+</body>
+
+</html>

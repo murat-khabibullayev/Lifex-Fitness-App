@@ -1,0 +1,1549 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+    padding-top: 60px;
+}
+
+html {
+    overflow-y: scroll !important;
+    /* Kaydırma çubuğu her zaman görünür kalsın (pasif olsa bile) */
+}
+
+/* MODERN ANA SAYFA TASARIMI */
+
+/* Hero Bölümü */
+.hero-section {
+    height: 100vh;
+    background-image: url('../images/home-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    /* Navbar'ın arkasına girmesin diye üstten boşluk (Navbar yüksekliğine göre) */
+    margin-top: center;
+    padding-top: center;
+}
+
+/* Renkli Geçişli Yazı (Gradient Text) */
+.text-gradient {
+    background: linear-gradient(to right, #f1c40f, #3498db);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* İstatistik Çubuğu */
+.stats-bar {
+    background: #0f0f0f;
+}
+
+/* Yuvarlak İkon Kutuları */
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s;
+}
+
+.step-card:hover .icon-circle {
+    transform: scale(1.1) rotate(5deg);
+    border-color: #f1c40f;
+}
+
+/* Glass Card (Buzlu Cam Kutular - Ana Sayfa İçin) */
+.glass-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.glass-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #f1c40f;
+}
+
+/* Footer Linkleri */
+.main-footer a {
+    color: #6c757d !important;
+}
+
+.main-footer a:hover {
+    color: #fff !important;
+}
+
+.main-footer {
+    background-color: #f8f9fa;
+    color: #212529;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Gece Modu (Dark Mode) */
+body.dark-mode .main-footer {
+    background-color: #000000;
+    /* Simsiyah */
+    color: #ffffff;
+    border-top: 1px solid #333;
+}
+
+/* Gece Modu Linkleri */
+body.dark-mode .main-footer a {
+    color: #adb5bd !important;
+}
+
+body.dark-mode .main-footer a:hover {
+    color: #fff !important;
+}
+
+/* Giriş Animasyonları (Basit Fade In) */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+    /* Başlangıçta gizli */
+}
+
+.delay-1 {
+    animation-delay: 0.2s;
+}
+
+.delay-2 {
+    animation-delay: 0.4s;
+}
+
+/* DASHBOARD SAYFASI */
+.stat-card {
+    transition: transform 0.3s;
+    border: none;
+    border-radius: 15px;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    /* Kartın üzerine gelince hafif kalkması */
+}
+
+.calorie-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: #0d6efd;
+    /* Bootstrap Primary rengi */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+    /* Hafif mavi gölge */
+}
+
+/* SPOR PROGRAMI SAYFASI (Workout Plan) */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    /* 16:9 Oranı (YouTube Videoları için standart) */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #000;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.day-header {
+    background: #2c3e50;
+    color: white;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+}
+
+/* Gelişmiş Dark Mode & Glassmorphizm */
+
+/* Ana Gövde */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.bg-dashboard-page {
+    background-image: url('../images/dashboard-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+/* Kartlar: Şeffaf ve Buzlu Cam Efekti */
+body.dark-mode .card,
+body.dark-mode .list-group-item,
+body.dark-mode .stat-card {
+    /* Siyahın %70'i kadar koyu, gerisi şeffaf */
+    background-color: rgba(20, 20, 20, 0.75) !important;
+
+    /* Arka planı flulaştırır (Buzlu Cam) */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    /* Kenarlara çok ince beyaz çizgi (Cam hissi verir) */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+    color: #ffffff !important;
+}
+
+/* İç Kutular (BMR ve TDEE kutuları gibi) */
+body.dark-mode .p-3.border.rounded {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-mode .text-muted,
+body.dark-mode .text-secondary,
+body.dark-mode small {
+    color: #cccccc !important;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6,
+body.dark-mode strong,
+body.dark-mode b,
+body.dark-mode span {
+    color: #ffffff !important;
+}
+
+body.dark-mode .card-text {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .bg-primary,
+body.dark-mode .bg-warning,
+body.dark-mode .bg-success,
+body.dark-mode .bg-danger {
+    opacity: 0.9;
+}
+
+body.dark-mode .card-header {
+    background-color: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-mode .alert small,
+body.dark-mode .alert strong {
+    color: #e0e0e0 !important;
+}
+
+body.bg-auth-page option {
+    background-color: #212529;
+    color: white;
+}
+
+/* Dropdown Animasyonu */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slideIn {
+    animation: slideIn 0.3s ease;
+}
+
+/* HOVER MENU AYARI (Sadece Bilgisayarlar İçin) */
+
+/* Ekran genişliği 992px'den büyükse (Laptop/PC) çalışsın */
+@media (min-width: 992px) {
+
+    /* Mouse üzerine gelince menüyü göster */
+    .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+        /* Menü ile buton arasındaki boşluğu siler */
+    }
+
+    /* Menü açıldığında ok işaretinin yönünü değiştirilsin */
+    .dropdown:hover .dropdown-toggle::after {
+        border-top: 0;
+        border-right: 0.3em solid transparent;
+        border-bottom: 0.3em solid;
+        border-left: 0.3em solid transparent;
+    }
+}
+
+/* --- NAVBAR LOGO AYARI --- */
+.navbar-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Mobil logo*/
+@media (max-width: 768px) {
+    .navbar-logo {
+        height: 35px;
+    }
+}
+
+body.bg-diet-page {
+    background-image: url('../images/diet-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+/* DIET PAGE */
+
+/* Arka Plan Resmi Ayarı */
+body.bg-diet-page {
+    /* Buraya yüklediğin resmin tam adını yaz: */
+    background-image: url('../images/diet-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    /* Genel yazı rengi beyaz olsun */
+}
+
+/* Kartlar (Buzlu Cam) */
+body.bg-diet-page .card {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    /* %70 Siyahlık */
+    backdrop-filter: blur(10px);
+    /* Arkadaki resmi flulaştır */
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    /* İnce beyaz çerçeve */
+    color: white;
+}
+
+/* En Üstteki Özet Kutusu */
+body.bg-diet-page .alert-info {
+    background-color: rgba(142, 142, 142, 0.5) !important;
+    /* Mavi ama şeffaf */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: #fff;
+}
+
+/* Listeler (Ara Öğünler) */
+body.bg-diet-page .list-group-item {
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Renkli Başlıkların Uyumu */
+body.bg-diet-page .card-header.bg-warning {
+    background-color: rgba(255, 193, 7, 0.8) !important;
+    color: #000 !important;
+}
+
+body.bg-diet-page .card-header.bg-primary {
+    background-color: rgba(13, 110, 253, 0.8) !important;
+}
+
+body.bg-diet-page .card-header.bg-success {
+    background-color: rgba(25, 135, 84, 0.8) !important;
+}
+
+/* Yazı Renklerini Düzeltme (Okunabilirlik) */
+body.bg-diet-page .text-muted,
+body.bg-diet-page .small {
+    color: #d1d1d1 !important;
+}
+
+/* "text-primary" */
+body.bg-diet-page .text-primary {
+    color: #6ea8fe !important;
+}
+
+/* Panela Dön butonu */
+body.bg-diet-page .btn-outline-secondary {
+    color: #fff;
+    border-color: #fff;
+}
+
+body.bg-diet-page .btn-outline-secondary:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* ÖZEL NAVBAR TASARIMI */
+.custom-navbar {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /* Hafif gölge */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Navbar Marka/Logo Ayarı*/
+.navbar-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    /*Logo hafif gölge */
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+}
+
+/* Navbar Linkleri */
+.navbar-nav .nav-link {
+    color: #e0e0e0 !important;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #fff !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* hidden Navbar'a */
+.navbar {
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-hidden {
+    transform: translateY(-100%);
+}
+
+/* DROPDOWN (AÇILIR MENÜ) TASARIMI*/
+.dropdown-menu {
+    background-color: rgba(20, 20, 20, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-item {
+    color: #e0e0e0;
+    transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Aktif sayfa rengi */
+.dropdown-item.active-page {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-left: 3px solid #f1c40f;
+}
+
+.dropdown-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* WORKOUT PAGE (SPOR PROGRAMI) ÖZEL STİLLER */
+/* Arka Plan Resmi */
+body.bg-workout-page {
+    background-image: url('../images/workout-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+}
+
+/* Kartları "Buzlu Cam"*/
+body.bg-workout-page .card {
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+/* Gün Başlıkları (Kırmızı, Mavi, Yeşil) */
+body.bg-workout-page .day-header {
+    background-color: rgba(44, 62, 80, 0.9) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/*  1. Gün Kırmızı */
+body.bg-workout-page .card:has(.bg-danger) .day-header.bg-danger,
+body.bg-workout-page .day-header.bg-danger {
+    background-color: rgba(220, 53, 69, 0.8) !important;
+}
+
+/* 2. Gün Mavi */
+body.bg-workout-page .card:has(.bg-primary) .day-header.bg-primary,
+body.bg-workout-page .day-header.bg-primary {
+    background-color: rgba(13, 110, 253, 0.8) !important;
+}
+
+/* 3. Gün Yeşil */
+body.bg-workout-page .card:has(.bg-success) .day-header.bg-success,
+body.bg-workout-page .day-header.bg-success {
+    background-color: rgba(25, 135, 84, 0.8) !important;
+}
+
+/*Tavsiye Kutusu (Sarı Alert) */
+body.bg-workout-page .alert-warning {
+    background-color: rgba(255, 193, 7, 0.2) !important;
+    border: 1px solid rgba(255, 193, 7, 0.5);
+    color: #ffda6a;
+}
+
+/* Yazı Renkleri ve Detaylar */
+body.bg-workout-page h6 strong {
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+/* Badge (Zorluk Seviyesi) */
+body.bg-workout-page .badge.bg-secondary {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+/* Ayırıcı Çizgiler */
+body.bg-workout-page hr {
+    border-color: rgba(255, 255, 255, 0.2);
+    opacity: 1;
+}
+
+/* Video Çerçevesi */
+body.bg-workout-page .video-container {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Geri Dön Butonu */
+body.bg-workout-page .btn-outline-secondary {
+    color: #fff;
+    border-color: #fff;
+}
+
+body.bg-workout-page .btn-outline-secondary:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* --- GİRİŞ & KAYIT SAYFASI (AUTH & FLIP) - GÜNCELLENMİŞ --- */
+
+/* 1. Arka Plan Resmi */
+body.bg-auth-page {
+    background-image: url('../images/auth-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+}
+
+/* 2. Kart Tasarımı (Ortak) */
+body.bg-auth-page .card {
+    /* Dönme işlemi sırasında arka plan sorun çıkarmasın diye burayı şeffaf yapıyoruz */
+    /* Rengi .front ve .back sınıflarına vereceğiz */
+    background-color: rgba(15, 15, 15, 0.80) !important;
+    border: none;
+    box-shadow: none;
+}
+
+/* 3. FLIP (DÖNME) EFEKTİ AYARLARI */
+/* --- GİRİŞ & KAYIT SAYFASI (FLIP DÜZELTİLMİŞ) --- */
+
+/* 1. Kapsayıcıya Sabit Yükseklik Veriyoruz (ÇÖZÜM BU) */
+.flip-container {
+    perspective: 1000px;
+    position: relative;
+    width: 100%;
+    height: 700px;
+    /* Yükseklik vermezsek arka taraf görünmez! */
+}
+
+/* 2. Döndürücü */
+.flipper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+/* 3. Döndürme Tetikleyicisi */
+.flip-container.hover .flipper {
+    transform: rotateY(180deg);
+}
+
+/* 4. Ön ve Arka Yüz (Ortak) */
+/* --- GÜNCELLENMİŞ CAM EFEKTİ VE INPUT AYARLARI --- */
+
+/* 1. Kartın Kendisi (Hafif Şeffaf Siyah) */
+.front,
+.back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    /* GÜNCELLENEN KISIM: 0.90 yaptık (Hafif şeffaf), Blur'u artırdık */
+    background-color: rgba(15, 15, 15, 0.70) !important;
+    backdrop-filter: blur(15px);
+    /* Arkadaki resmi daha çok bulanıklaştır ki yazı okunsun */
+    -webkit-backdrop-filter: blur(15px);
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    /* İnce beyaz çerçeve şart */
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+}
+
+/* --- GİRİŞ SAYFASI (LOGIN) DÜZELTMESİ --- */
+
+.login-card-design {
+    /* Kayıt sayfasındaki .front/.back ile AYNI görsel özellikler */
+    background-color: rgba(15, 15, 15, 0.90) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+}
+
+/* Giriş Yap Butonu Rengi (Sarı Olsun) */
+body.bg-auth-page .btn-login-custom {
+    background-color: #f1c40f !important;
+    color: #000 !important;
+    /* Siyah Yazı */
+    font-weight: bold;
+    border: none;
+    padding: 10px;
+}
+
+body.bg-auth-page .btn-login-custom:hover {
+    background-color: #d4ac0d !important;
+    transform: translateY(-2px);
+}
+
+/* 2. Input Kutularının İç Rengi */
+body.bg-auth-page .form-control,
+body.bg-auth-page .form-select {
+    /* Kutunun içi biraz daha belirgin olsun */
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    /* Yazdığın yazı BEYAZ */
+}
+
+/* 3. Placeholder (Silik Yazı) Renk */
+body.bg-auth-page .form-control::placeholder {
+    color: #bbbbbb !important;
+    /* Açık Gri (Okunur) */
+    opacity: 1;
+    /* Firefox için gerekli */
+}
+
+/* Inputa tıklayınca */
+body.bg-auth-page .form-control:focus {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-color: #f1c40f !important;
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+}
+
+/* 5. Kartların İç Tasarımı (Glassmorphism) */
+
+.front .card,
+.back .card {
+    height: 100%;
+    /* Kart boyu kutuya otursun */
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    /* Taşmaları gizle */
+}
+
+/* Ön Yüz */
+.front {
+    z-index: 2;
+    transform: rotateY(0deg);
+}
+
+/* Arka Yüz */
+.back {
+    transform: rotateY(180deg);
+}
+
+/* Arka Yüzün İçeriği Taşarsa Kaydır (Scroll) */
+.back .card {
+    overflow-y: auto !important;
+}
+
+/* Scrollbar Tasarımı (İnce ve Şık) */
+.back .card::-webkit-scrollbar {
+    width: 8px;
+}
+
+.back .card::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.back .card::-webkit-scrollbar-thumb {
+    background: #f1c40f;
+    border-radius: 4px;
+}
+
+/* 4. Form Elemanları ve Renkler (Eski kodlardan aldık) */
+body.bg-auth-page .card-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.bg-auth-page .form-control,
+body.bg-auth-page .form-select {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+body.bg-auth-page .form-control:focus,
+body.bg-auth-page .form-select:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: #f1c40f;
+    box-shadow: 0 0 0 0.25rem rgba(241, 196, 15, 0.25);
+    color: #fff;
+}
+
+/* Dropdown Seçenekleri */
+body.bg-auth-page option {
+    background-color: #212529;
+    color: white;
+}
+
+/* Linkler ve Butonlar */
+body.bg-auth-page a {
+    color: #f1c40f !important;
+}
+
+body.bg-auth-page label {
+    color: #e0e0e0;
+}
+
+body.bg-auth-page .text-muted {
+    color: #ccc !important;
+}
+
+/* Buton (İlerle/Kaydol) */
+body.bg-auth-page .btn-warning,
+body.bg-auth-page .btn-success {
+    color: #000;
+    font-weight: bold;
+}
+
+/*KAYIT OL BUTONU
+/* Giriş/Kayıt sayfalarında olsak bile bu butonun yazısı SİYAH kalsın */
+body.bg-auth-page .btn-register-custom,
+.btn-register-custom {
+    color: #000000 !important;
+    font-weight: bold;
+    background-color: #f1c40f !important;
+    opacity: 1 !important;
+}
+
+/* Üzerine gelince (Hover) */
+body.bg-auth-page .btn-register-custom:hover,
+.btn-register-custom:hover {
+    background-color: #d4ac0d !important;
+    color: #000000 !important;
+}
+
+/*PROFİL SAYFASI ÖZEL STİLLERİ*/
+
+/*Arka Plan Resmi */
+body.bg-profile-page {
+    background-image: url('../images/profile-bg.png');
+    background-size: cover;
+    background-position: center 20px;
+    background-attachment: fixed;
+    color: white;
+}
+
+/*Profil Kartı (Buzlu Cam Yap) */
+body.bg-profile-page .card {
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+/*Avatar (Yuvarlak Profil Resmi) */
+body.bg-profile-page .bg-primary.rounded-circle {
+    background-color: transparent !important;
+    border: 2px solid #f1c40f;
+    color: #f1c40f !important;
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
+}
+
+/*Yazı Renklerini Düzeltme */
+body.bg-profile-page .text-muted,
+body.bg-profile-page .small {
+    color: #cccccc !important;
+}
+
+/* Ara çizgiler */
+body.bg-profile-page .border-end,
+body.bg-profile-page .border-bottom {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Email Rozeti (Badge) */
+body.bg-profile-page .badge.bg-secondary {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+/* Hedef Kısmındaki Mavi Yazı */
+body.bg-profile-page .text-primary {
+    color: #6ea8fe !important;
+}
+
+/* Butonların Uyumu */
+body.bg-profile-page .btn-outline-primary {
+    color: #6ea8fe;
+    border-color: #6ea8fe;
+}
+
+body.bg-profile-page .btn-outline-primary:hover {
+    background-color: #6ea8fe;
+    color: #000;
+}
+
+body.bg-profile-page .btn-dark {
+    background-color: #f1c40f;
+    color: #000;
+    border: none;
+}
+
+body.bg-profile-page .btn-dark:hover {
+    background-color: #d4ac0d;
+}
+
+/* --- SETTINGS PAGE (AYARLAR) - FİNAL VERSİYON --- */
+
+/* 1. Ortak Ayar: Arka Plan Resmi */
+body.bg-settings-page {
+    background-image: url('../images/settings-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* 2. GÜNDÜZ MODU (Varsayılan - Light Mode) */
+body.bg-settings-page .card,
+body.bg-settings-page .list-group-item {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Gündüz Link ve Butonlar */
+body.bg-settings-page .action-link a {
+    color: #000 !important;
+}
+
+body.bg-settings-page .action-link a:hover {
+    color: #0d6efd !important;
+}
+
+body.bg-settings-page .text-muted {
+    color: #6c757d !important;
+}
+
+body.bg-settings-page .btn-outline-secondary {
+    color: #000;
+    border-color: #000;
+}
+
+body.bg-settings-page .btn-outline-secondary:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+/* 3. GECE MODU (Dark Mode Aktifse) */
+body.dark-mode.bg-settings-page .card,
+body.dark-mode.bg-settings-page .list-group-item {
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-mode.bg-settings-page .form-control,
+body.dark-mode.bg-settings-page .form-select {
+    /* Kutunun içi biraz daha belirgin olsun */
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    /* Yazdığın yazı BEYAZ */
+}
+
+/* Gece Link ve Butonlar */
+body.dark-mode.bg-settings-page .action-link a {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode.bg-settings-page .action-link a:hover {
+    color: #f1c40f !important;
+}
+
+body.dark-mode.bg-settings-page .text-muted {
+    color: #bbb !important;
+}
+
+body.dark-mode.bg-settings-page .btn-outline-secondary {
+    color: #fff;
+    border-color: #fff;
+}
+
+body.dark-mode.bg-settings-page .btn-outline-secondary:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Ortak Düzeltmeler */
+body.bg-settings-page option,
+body.bg-profile-page option,
+body.dark-mode option {
+    background-color: #212529;
+    color: white;
+}
+
+/* Hata Bildir (Her iki modda da kırmızı) */
+body.bg-settings-page .text-danger {
+    color: #dc3545 !important;
+}
+
+/* ÖZEL BİLDİRİM KUTUSU */
+.custom-alert {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    z-index: 9999;
+
+    background-color: rgba(25, 135, 84, 0.9);
+    color: white;
+
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+
+    backdrop-filter: blur(5px);
+    min-width: 300px;
+    font-weight: 500;
+}
+
+/* Giriş Animasyonu (Sağdan kayarak gelir) */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-in-right {
+    animation: slideInRight 0.5s ease-out forwards;
+}
+
+/* Navbar Link Aktifliği */
+.nav-link.active-link {
+    color: #f1c40f !important;
+    font-weight: bold;
+}
+
+/* Üyelik ve Ders Kartları Büyüme Efekti */
+.card {
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* --- ÜYELİK SAYFASI TASARIMI --- */
+
+/* 1. Arka Plan */
+body.bg-membership-page {
+    background-image: url('../images/membership-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+}
+
+/* 2. Standart Kartlar (Buzlu Cam) */
+.pricing-card {
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Koyu şeffaf */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    transition: transform 0.3s ease;
+    color: white;
+}
+
+.pricing-card:hover {
+    transform: translateY(-10px);
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* 3. POPÜLER KART (Özel Tasarım) */
+.popular-card {
+    background-color: rgba(20, 20, 20, 0.85);
+    /* Daha koyu ve belirgin */
+    border: 2px solid #f1c40f;
+    /* Sarı Çerçeve */
+    transform: scale(1.05);
+    /* Diğerlerinden biraz daha büyük */
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 0 30px rgba(241, 196, 15, 0.2);
+    /* Sarı parlama */
+}
+
+/* Popüler kartın hover'ı (daha fazla büyümesin, sabit kalsın) */
+.popular-card:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
+/* 4. "EN POPÜLER" Rozeti */
+.popular-badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f1c40f;
+    color: #000;
+    font-weight: bold;
+    padding: 5px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* 5. Buton Parlaması */
+.btn-glow {
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.5);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(241, 196, 15, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(241, 196, 15, 0);
+    }
+}
+
+/* 6. Yazı Ayarları */
+.pricing-card .text-muted {
+    color: #b0b0b0 !important;
+}
+
+.letter-spacing {
+    letter-spacing: 2px;
+}
+
+/* --- GRUP DERSLERİ HERO ALANI --- */
+.classes-hero {
+    height: 100vh;
+    /* Ekranın %60'ı kadar yükseklik */
+    background-image: url('../images/classes-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    /* Parallax efekt (Resim sabit kalır) */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: -100px;
+    /* Navbar'ın arkasına girmesi için */
+    padding-top: 100px;
+    margin-bottom: 50px;
+}
+
+/* Resmin üzerine koyu perde (Yazı okunsun diye) */
+.classes-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* %50 Siyahlık */
+}
+
+/* Yazı Stilleri */
+.classes-hero h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.classes-hero p {
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* --- HESAPLAMA ARAÇLARI SAYFASI --- */
+
+/* 1. Arka Plan */
+body.bg-tools-page {
+    background-image: url('../images/tools-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+}
+
+/* 2. Sekmeler (Nav Pills) Tasarımı */
+.nav-pills .nav-link {
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Pasifken şeffaf */
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s;
+}
+
+/* Aktif Sekme Rengi */
+.nav-pills .nav-link.active {
+    background-color: #f1c40f !important;
+    /* Sarı */
+    color: black !important;
+    transform: scale(1.05);
+    /* Hafif büyüsün */
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
+}
+
+/* Hover */
+.nav-pills .nav-link:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 1. Besin Arama Sonuçları */
+#foodSearchResults {
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    background: #212529;
+    /* Koyu Gri */
+    border: 1px solid #444;
+}
+
+#foodSearchResults li {
+    cursor: pointer;
+    padding: 10px 15px;
+    border-bottom: 1px solid #333;
+    color: #fff;
+    transition: background 0.2s;
+}
+
+#foodSearchResults li:hover {
+    background-color: #f1c40f;
+    /* Sarı */
+    color: black;
+}
+
+/* 2. Daire Grafik (Besin Kalori İçin) */
+.circle-chart {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    /* Varsayılan gradient, JS ile değişecek */
+    background: conic-gradient(#2ecc71 0% 0%, #333 0% 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.circle-inner {
+    width: 100px;
+    height: 100px;
+    background-color: #212529;
+    /* Kart rengiyle uyumlu koyu */
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+/* 3. Tab (Sekme) Tasarımı */
+.nav-pills .nav-link {
+    color: #ccc;
+    background: rgba(255, 255, 255, 0.05);
+    margin: 0 5px 10px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-pills .nav-link.active {
+    background-color: #f1c40f !important;
+    color: #000 !important;
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
+}
+
+/* --- ADMIN PANELİ KARANLIK TEMA --- */
+
+/* 1. Admin Gövdesi */
+body.admin-page {
+    margin-top: center !important;
+    background-image: url('../images/admin-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: #121212;
+    /* Siyah Arka Plan */
+    color: #e0e0e0;
+    /* Açık Gri Yazı */
+}
+
+/* --- ADMIN PANELİ ANIMASYONLU LAYOUT (FİNAL) --- */
+
+/* 1. SIDEBAR (SOL MENÜ) */
+#adminSidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 280px !important;
+    height: 100vh;
+    z-index: 2000 !important;
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    overflow-y: auto;
+
+    /* ANİMASYON AYARI */
+    transition: all 0.3s ease-in-out !important;
+}
+
+/* Sidebar Kapalıyken (Sola git) */
+.sidebar-closed {
+    margin-left: -280px !important;
+}
+
+/* 2. ADMIN NAVBAR (ÜST MENÜ) */
+.admin-top-navbar {
+    position: fixed !important;
+    top: 0;
+    /* Başlangıçta Sidebar'ın bittiği yerden başla */
+    left: 280px !important;
+    width: calc(100% - 280px) !important;
+    z-index: 1000 !important;
+
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    /* ANİMASYON AYARI (Sidebar ile aynı hızda) */
+    transition: all 0.3s ease-in-out !important;
+}
+
+/* 3. İÇERİK ALANI (KARTLAR) */
+.admin-content {
+    /* Başlangıçta Sidebar kadar boşluk bırak */
+    margin-left: 280px !important;
+    margin-top: 80px !important;
+    /* Navbar yüksekliği */
+    padding: 30px !important;
+    width: auto !important;
+
+    /* ANİMASYON AYARI */
+    transition: all 0.3s ease-in-out !important;
+}
+
+/* --- MENÜ KAPANDIĞINDAKİ DURUMLAR --- */
+
+/* Navbar Sola Yapışsın ve Genişlesin */
+.admin-content.full-width .admin-top-navbar {
+    left: 0 !important;
+    width: 100% !important;
+}
+
+/* İçerik Sola Yapışsın */
+.admin-content.full-width {
+    margin-left: 0 !important;
+}
+
+body.admin-page .form-control,
+body.admin-page .form-select {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+/* 3. Placeholder (Silik Yazı) Renk */
+body.admin-page .form-control::placeholder {
+    color: #bbbbbb !important;
+    /* Açık Gri (Okunur) */
+    opacity: 1;
+    /* Firefox için gerekli */
+}
+
+/* 3. Admin Kartları (Buzlu Cam Efekti) */
+/* Hem istatistik kutuları hem de grafik kutuları için */
+.admin-page .admin-card,
+.admin-page .card {
+    background-color: rgba(20, 20, 20, 0.85) !important;
+    /* Koyu Yarı Şeffaf */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: white !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 4. Kart Başlıkları ve Tablolar */
+.admin-page .card-header {
+    background-color: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.admin-page .card-header h5 {
+    color: #e0e0e0 !important;
+    /* Başlıklar Gri/Beyaz */
+}
+
+.admin-page .table {
+    color: #e0e0e0 !important;
+}
+
+.admin-page .table-light {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 5. Yazı Renkleri Düzeltmesi (Görünmeyen yazılar için) */
+.admin-page .text-muted {
+    color: #b0b0b0 !important;
+    /* Açık gri yap */
+}
+
+.admin-page h3,
+.admin-page h2,
+.admin-page small {
+    color: white !important;
+}
+
+/* İstatistik Kutularının Kenar Renkleri (Korunsun) */
+.border-primary {
+    border-color: #0d6efd !important;
+}
+
+.border-success {
+    border-color: #198754 !important;
+}
+
+.border-warning {
+    border-color: #ffc107 !important;
+}
+
+.border-secondary {
+    border-color: #6c757d !important;
+}
+
+.food-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* --- HOCA PORTALI ÖZEL TASARIM (DARK UI) --- */
+
+/* Arka Planlar */
+.bg-coach-dark {
+    background-color: #121212;
+    /* En koyu zemin */
+    color: #e0e0e0;
+}
+
+.bg-dark-sidebar {
+    background-color: #181818;
+    /* Yan menüler bir tık açık */
+}
+
+.bg-dark-main {
+    background-color: #121212;
+    /* Orta alan */
+}
+
+/* Sol Menüdeki Aktif Öğrenci */
+.active-student {
+    background: linear-gradient(90deg, rgba(13, 202, 240, 0.1) 0%, transparent 100%);
+    border-left: 3px solid #0dcaf0 !important;
+    /* Mavi Çizgi */
+}
+
+/* Egzersiz Kartları (Workout Card) */
+.workout-card {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: grab;
+    transition: all 0.2s;
+    color: #ccc;
+    text-align: center;
+}
+
+.workout-card:hover {
+    background-color: #252525;
+    transform: translateY(-2px);
+}
+
+/* Parlayan Mavi Kart (Glow Effect) */
+.workout-card.glow-blue {
+    border-color: #0dcaf0;
+    box-shadow: 0 0 15px rgba(13, 202, 240, 0.2);
+    /* Mavi Neon */
+    color: white;
+}
+
+.workout-card.glow-blue i {
+    color: #0dcaf0;
+}
+
+/* Küçük Yazılar */
+.x-small {
+    font-size: 0.75rem;
+}
+
+/* Scrollbar Düzenlemesi (Koyu Tema İçin) */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* ÖZEL ÜYELİK KARTI TASARIMI */
+.membership-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Altın Parlama Efekti */
+.gold-glow {
+    box-shadow: 0 0 50px rgba(241, 196, 15, 0.15);
+    border: 1px solid rgba(241, 196, 15, 0.3);
+}
+
+/* Çip Simgesi */
+.chip {
+    width: 50px;
+    height: 35px;
+    background: linear-gradient(135deg, #d4af37 0%, #f7ef8a 100%);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.chip::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.info-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #aaa;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+}

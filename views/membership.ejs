@@ -1,0 +1,80 @@
+<!-- views/membership.ejs -->
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Üyelik Paketleri - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="bg-membership-page" style="padding-top: 100px;">
+
+    <%- include('partials/navbar') %>
+
+        <div class="container pb-5">
+            <div class="text-center mb-5 text-white">
+                <h5 class="text-warning fw-bold letter-spacing">LIFEX CLUB</h5>
+                <h1 class="display-4 fw-bold">Sana Uygun Paketi Seç</h1>
+            </div>
+
+            <div class="row justify-content-center align-items-center g-4">
+
+                <% plans.forEach(plan=> { %>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card pricing-card h-100 <%= plan.isPopular ? 'popular-card' : '' %>">
+
+                            <% if (plan.isPopular) { %>
+                                <div class="popular-badge">EN POPÜLER 🔥</div>
+                                <% } %>
+
+                                    <div class="card-body p-4">
+                                        <h5 class="fw-bold <%= plan.colorClass %>">
+                                            <%= plan.name %>
+                                        </h5>
+                                        <h2 class="display-5 fw-bold my-3 text-white">
+                                            <%= plan.price %>₺
+                                        </h2>
+                                        <p class="text-muted small">
+                                            <%= plan.durationMonths %> Aylık Üyelik
+                                        </p>
+
+                                        <hr class="border-secondary">
+
+                                        <ul class="list-unstyled mb-4 text-white">
+                                            <% plan.features.forEach(feature=> { %>
+                                                <li class="mb-2"><i
+                                                        class="fa-solid fa-check <%= plan.colorClass %> me-2"></i>
+                                                    <%= feature %>
+                                                </li>
+                                                <% }) %>
+                                        </ul>
+
+                                        <!-- Satın Al Butonu -->
+                                        <!-- Giriş yapmışsa direkt ödemeye, yapmamışsa "geri dönüş linkiyle" kayıt sayfasına -->
+                                        <% if (typeof user !=='undefined' && user) { %>
+                                            <a href="/payment/<%= plan._id %>"
+                                                class="btn <%= plan.isPopular ? 'btn-warning text-dark btn-glow' : 'btn-outline-light' %> w-100 fw-bold rounded-pill">
+                                                SATIN AL
+                                            </a>
+                                            <% } else { %>
+                                                <!-- DİKKAT: Burası değişti. URL'in sonuna ?returnTo=... ekledik -->
+                                                <a href="/register?returnTo=/payment/<%= plan._id %>"
+                                                    class="btn <%= plan.isPopular ? 'btn-warning text-dark btn-glow' : 'btn-outline-light' %> w-100 fw-bold rounded-pill">
+                                                    SATIN AL
+                                                </a>
+                                                <% } %>
+                                    </div>
+                        </div>
+                    </div>
+                    <% }) %>
+
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

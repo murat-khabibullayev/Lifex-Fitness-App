@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel - Lifex</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="bg-dashboard-page">
+
+    <%- include('partials/navbar') %>
+
+        <!-- FLASH MESAJ ALANI -->
+        <% if (typeof alert !=='undefined' && alert) { %>
+            <div class="custom-alert slide-in-right">
+                <div class="d-flex align-items-center justify-content-between">
+                    <span>
+                        <%= alert.message %>
+                    </span>
+                    <button type="button" class="btn-close btn-close-white ms-3"
+                        onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            </div>
+            <script>
+                setTimeout(() => {
+                    const alertBox = document.querySelector('.custom-alert');
+                    if (alertBox) alertBox.remove();
+                }, 5000);
+            </script>
+            <% } %>
+
+                <div class="container py-5">
+
+                    <!-- Karşılama Başlığı -->
+                    <div class="row mb-4">
+                        <div class="col-md-12 text-center text-white">
+                            <h2 class="fw-bold">Hoş Geldin, <%= user.fullName %>!</h2>
+                            <p class="opacity-75">Senin için hazırladığımız vücut analizi ve beslenme raporu aşağıdadır.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <!-- SOL TARAF: Kalori ve Hedefler -->
+                        <div class="col-md-4">
+                            <div class="card stat-card shadow h-100">
+                                <div class="card-body text-center p-4 d-flex flex-column justify-content-center">
+                                    <h5 class="card-title text-muted mb-4">Günlük Hedef Kalori</h5>
+
+                                    <!-- Kalori Yuvarlağı -->
+                                    <div class="calorie-circle mb-3">
+                                        <% if(user.dailyCalories> 0) { %>
+                                            <h2 class="mb-0 fw-bold">
+                                                <%= user.dailyCalories %>
+                                            </h2>
+                                            <small>kcal</small>
+                                            <% } else { %>
+                                                <h4 class="mb-0 fw-bold">---</h4>
+                                                <small>Veri Yok</small>
+                                                <% } %>
+                                    </div>
+
+                                    <p class="card-text text-secondary mb-4">
+                                        Hedefin:
+                                        <span class="fw-bold text-white">
+                                            <% if(user.goal==='lose' ) { %>
+                                                Kilo Vermek
+                                                <% } else if(user.goal==='gain' ) { %>
+                                                    Kilo Almak
+                                                    <% } else if(user.goal==='maintain' ) { %>
+                                                        Formu Korumak
+                                                        <% } else { %>
+                                                            <span class="text-muted small">Belirtilmedi</span>
+                                                            <% } %>
+                                        </span>
+                                    </p>
+                                    <!-- --- YENİ EKLENEN KISIM: İDEAL KİLO VE SU --- -->
+                                    <!-- Mevcut yapıyı bozmadan altına ekledik -->
+                                    <div class="row border-top border-secondary pt-3 mt-auto"
+                                        style="margin-bottom: 55px;">
+                                        <div class="col-6 border-end border-secondary">
+                                            <small class="text-muted d-block">İdeal Kilo</small>
+                                            <% if (analysis.idealWeight> 0) { %>
+                                                <span class="fw-bold text-success fs-5">
+                                                    <%= analysis.idealWeight %> kg
+                                                </span>
+                                                <% } else { %>
+                                                    <a href="/edit-profile"
+                                                        class="text-warning small text-decoration-none">Hesapla
+                                                        &rarr;</a>
+                                                    <% } %>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">Su İhtiyacı</small>
+                                            <% if (analysis.waterNeed> 0) { %>
+                                                <span class="fw-bold text-info fs-5">
+                                                    <%= analysis.waterNeed %> Lt
+                                                </span>
+                                                <% } else { %>
+                                                    <a href="/edit-profile"
+                                                        class="text-warning small text-decoration-none">Hesapla
+                                                        &rarr;</a>
+                                                    <% } %>
+                                        </div>
+                                    </div>
+                                    <!-- ------------------------------------------- -->
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SAĞ TARAF: Detaylı İstatistikler -->
+                        <div class="col-md-8">
+                            <div class="card stat-card shadow h-100">
+                                <div class="card-header border-0 py-3">
+                                    <h5 class="mb-0 fw-bold">Vücut Metriklerin</h5>
+                                </div>
+                                <div class="card-body">
+
+                                    <!-- --- YENİ EKLENEN KISIM: 3'LÜ YAPI (BMR, TDEE, YAĞ) --- -->
+                                    <!-- Eskiden 2 kutuydu, şimdi 3 kutu oldu -->
+                                    <div class="row text-center g-2">
+                                        <!-- BMR -->
+                                        <div class="col-md-4">
+                                            <div class="p-3 border rounded h-100 bg-transparent border-secondary">
+                                                <% if(user.bmr> 0) { %>
+                                                    <h3 class="text-primary fw-bold">
+                                                        <%= user.bmr %>
+                                                    </h3>
+                                                    <% } else { %>
+                                                        <h3 class="text-muted fw-bold">0</h3>
+                                                        <% } %>
+                                                            <small class="text-muted d-block">BMR (Bazal
+                                                                Metabolizma)</small>
+                                                            <span style="font-size: 11px; color: #888;">Dinlenirken
+                                                                yakılan</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- TDEE -->
+                                        <div class="col-md-4">
+                                            <div class="p-3 border rounded h-100 bg-transparent border-secondary">
+                                                <% if(user.tdee> 0) { %>
+                                                    <h3 class="text-success fw-bold">
+                                                        <%= user.tdee %>
+                                                    </h3>
+                                                    <% } else { %>
+                                                        <h3 class="text-muted fw-bold">0</h3>
+                                                        <% } %>
+                                                            <small class="text-muted d-block">TDEE (Günlük
+                                                                Harcama)</small>
+                                                            <span style="font-size: 11px; color: #888;">Aktivite dahil
+                                                                toplam</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- VÜCUT YAĞI (YENİ) -->
+                                        <div class="col-md-4">
+                                            <div class="p-3 border rounded h-100 bg-transparent border-secondary">
+                                                <% if(analysis.bodyFat> 0) { %>
+                                                    <h3 class="text-danger fw-bold">%<%= analysis.bodyFat %>
+                                                    </h3>
+                                                    <small class="text-muted d-block">Vücut Yağ Oranı</small>
+                                                    <span style="font-size: 11px; color: #888;">US Navy Method</span>
+                                                    <% } else { %>
+                                                        <h4 class="text-muted fw-bold mt-1">?</h4>
+                                                        <a href="/edit-profile"
+                                                            class="btn btn-sm btn-outline-warning py-0"
+                                                            style="font-size: 10px;">Ölçüleri Gir</a>
+                                                        <small class="text-muted d-block mt-1">Vücut Yağ Oranı</small>
+                                                        <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- --------------------------------------------------- -->
+
+                                    <hr class="border-secondary my-4">
+
+                                    <!-- Sağlık Analizi -->
+                                    <div class="card border border-secondary mb-4"
+                                        style="background-color: rgba(0, 0, 0, 0) !important;">
+                                        <div class="card-header border-bottom border-secondary d-flex justify-content-between align-items-center"
+                                            style="background: linear-gradient(45deg, #1a2980, #26d0ce) !important;">
+                                            <h6 class="mb-0 fw-bold text-white">Sağlık Analizi</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <!-- BMI -->
+                                                <div class="col-md-4 text-center border-end border-secondary">
+                                                    <small class="text-muted">Vücut Kitle İndeksi (BMI)</small>
+                                                    <% if(analysis.bmi> 0) { %>
+                                                        <h1
+                                                            class="display-5 fw-bold <%= analysis.riskFactor > 2 ? 'text-danger' : 'text-success' %> mb-0">
+                                                            <%= analysis.bmi %>
+                                                        </h1>
+                                                        <span
+                                                            class="badge rounded-pill mt-2 <%= analysis.riskFactor === 0 ? 'bg-success' : 'bg-warning text-dark' %>">
+                                                            <%= analysis.status %>
+                                                        </span>
+                                                        <% } else { %>
+                                                            <h1 class="display-5 fw-bold text-muted mb-0">0</h1>
+                                                            <a href="/edit-profile"
+                                                                class="text-warning small">Hesapla</a>
+                                                            <% } %>
+                                                                <p class="small text-muted mt-2 mb-0">DSÖ verilerine
+                                                                    göre.</p>
+                                                </div>
+
+                                                <!-- Riskler -->
+                                                <div class="col-md-8 ps-md-4 mt-3 mt-md-0">
+                                                    <small class="fw-bold text-white">Potansiyel Risk Faktörleri</small>
+
+                                                    <div class="mb-2 mt-2">
+                                                        <div class="d-flex justify-content-between mb-1">
+                                                            <small class="text-light">Tip 2 Diyabet Riski</small>
+                                                            <small class="fw-bold text-light">
+                                                                <%= analysis.diabetesRisk %>%
+                                                            </small>
+                                                        </div>
+                                                        <div class="progress"
+                                                            style="height: 6px; background-color: rgba(255,255,255,0.1);">
+                                                            <div class="progress-bar <%= analysis.diabetesRisk > 50 ? 'bg-danger' : 'bg-info' %>"
+                                                                style="width: <%= analysis.diabetesRisk %>%;"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-2">
+                                                        <div class="d-flex justify-content-between mb-1">
+                                                            <small class="text-light">Kalp Hastalığı Riski</small>
+                                                            <small class="fw-bold text-light">
+                                                                <%= analysis.heartRisk %>%
+                                                            </small>
+                                                        </div>
+                                                        <div class="progress"
+                                                            style="height: 6px; background-color: rgba(255,255,255,0.1);">
+                                                            <div class="progress-bar <%= analysis.heartRisk > 50 ? 'bg-danger' : 'bg-warning' %>"
+                                                                style="width: <%= analysis.heartRisk %>%;"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="alert mt-3 mb-0 p-2 border-0 bg-transparent text-secondary"
+                                                        style="font-size: 11px; line-height: 1.2;">
+                                                        Bu analiz Dünya Sağlık Örgütü (WHO) standartları ve bilimsel
+                                                        veri setleri kullanılarak hesaplanmıştır. Tıbbi teşhis değildir.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Profil Bilgileri (Tablo) -->
+                                    <h6 class="text-muted mb-3">Profil Bilgilerin</h6>
+                                    <table class="table table-dark table-borderless text-white small">
+                                        <thead class="border-bottom border-secondary">
+                                            <tr>
+                                                <th>Yaş</th>
+                                                <th>Boy</th>
+                                                <th>Kilo</th>
+                                                <th>Cinsiyet</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <%= user.age || '-' %>
+                                                </td>
+                                                <td>
+                                                    <%= user.height ? user.height + ' cm' : '-' %>
+                                                </td>
+                                                <td>
+                                                    <%= user.weight ? user.weight + ' kg' : '-' %>
+                                                </td>
+                                                <td>
+                                                    <% if (user.gender==='male' ) { %>
+                                                        Erkek
+                                                        <% } else if (user.gender==='female' ) { %>
+                                                            Kadın
+                                                            <% } else { %>
+                                                                -
+                                                                <% } %>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="d-flex gap-2 mt-3">
+
+                                        <!-- YEMEK PROGRAMI BUTONU -->
+                                        <% if (user.age && user.weight && user.height && user.gender) { %>
+                                            <!-- Veriler tamsa programa git -->
+                                            <a href="/generate-diet/<%= user._id %>"
+                                                class="btn btn-primary flex-grow-1">Otomatik Yemek Programı Oluştur</a>
+                                            <% } else { %>
+                                                <!-- Veriler eksikse profile git -->
+                                                <a href="/edit-profile" class="btn btn-primary flex-grow-1"
+                                                    onclick="alert('Program oluşturmak için önce profil bilgilerinizi (Yaş, Boy, Kilo, Cinsiyet) tamamlamalısınız.');">Otomatik
+                                                    Yemek Programı Oluştur</a>
+                                                <% } %>
+
+                                                    <!-- SPOR PROGRAMI BUTONU -->
+                                                    <% if (user.age && user.weight && user.height && user.gender) { %>
+                                                        <a href="/generate-workout/<%= user._id %>"
+                                                            class="btn btn-warning flex-grow-1 text-dark fw-bold">Haftalık
+                                                            Spor Programı Oluştur</a>
+                                                        <% } else { %>
+                                                            <a href="/edit-profile"
+                                                                class="btn btn-warning flex-grow-1 text-dark fw-bold"
+                                                                onclick="alert('Program oluşturmak için önce profil bilgilerinizi tamamlamalısınız.');">Haftalık
+                                                                Spor Programı Oluştur</a>
+                                                            <% } %>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <%- include('partials/footer') %>
+                    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

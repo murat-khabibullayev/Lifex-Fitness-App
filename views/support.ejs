@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Destek Merkezi - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="bg-settings-page" style="padding-top: 100px;"> <!-- Ayarlar arka planını kullandık -->
+
+    <%- include('partials/navbar') %>
+
+        <!-- FLASH MESAJ -->
+        <% if (typeof alert !=='undefined' && alert) { %>
+            <div class="custom-alert slide-in-right">
+                <span>
+                    <%= alert.message %>
+                </span>
+                <button type="button" class="btn-close btn-close-white ms-3"
+                    onclick="this.parentElement.parentElement.remove()"></button>
+            </div>
+            <% } %>
+
+                <div class="container pb-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 col-lg-6">
+
+                            <div class="text-center text-white mb-4">
+                                <h2 class="fw-bold"><i class="fa-solid fa-headset me-2"></i> Nasıl Yardımcı Olabiliriz?
+                                </h2>
+                                <p class="opacity-75">Sorunlarınızı veya önerilerinizi bize iletin.</p>
+                            </div>
+
+                            <!-- DESTEK KARTI -->
+                            <div class="card shadow-lg border-0"
+                                style="background-color: rgba(0, 0, 0, 0.75); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: white;">
+                                <div class="card-body p-4 p-md-5">
+
+                                    <form action="/support/send" method="POST">
+
+                                        <!-- Konu Seçimi -->
+                                        <div class="mb-4">
+                                            <label class="form-label text-warning fw-bold">Konu Seçiniz</label>
+                                            <select name="subject"
+                                                class="form-select bg-dark text-white border-secondary" required>
+                                                <option value="" selected disabled>Ne hakkında?</option>
+                                                <option value="Hata Bildirimi">Hata Bildirimi (Bug)</option>
+                                                <option value="Ödeme Sorunu">Ödeme / Üyelik Sorunu</option>
+                                                <option value="Eğitmen Şikayeti">Eğitmen / Ders Şikayeti</option>
+                                                <option value="Öneri">Öneri / İstek</option>
+                                                <option value="Diğer">Diğer</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Mesaj Alanı -->
+                                        <div class="mb-4">
+                                            <label class="form-label text-warning fw-bold">Mesajınız</label>
+                                            <textarea name="message"
+                                                class="form-control bg-dark text-white border-secondary " rows="6"
+                                                placeholder="Lütfen sorunu detaylıca açıklayınız..."
+                                                required></textarea>
+                                        </div>
+
+                                        <!-- Butonlar -->
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-warning fw-bold text-dark btn-lg">
+                                                <i class="fa-solid fa-paper-plane me-2"></i> GÖNDER
+                                            </button>
+                                            <a href="#" onclick="history.back(); return false;"
+                                                class="btn btn-outline-light">Geri Dön</a>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+
+                            <!-- İletişim Bilgileri (Alt Kısım) -->
+                            <div class="row mt-5 text-center text-white">
+                                <div class="col-4">
+                                    <i class="fa-solid fa-envelope fa-2x text-info mb-2"></i>
+                                    <p class="small">admin@lifex.com</p>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fa-solid fa-phone fa-2x text-success mb-2"></i>
+                                    <p class="small">+90 542 120 68 56</p>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fa-solid fa-location-dot fa-2x text-danger mb-2"></i>
+                                    <p class="small">Üsküdar, İstanbul</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <%- include('partials/footer') %>
+                    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

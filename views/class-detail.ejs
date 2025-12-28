@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>
+        <%= type.toUpperCase() %> Dersi - LIFEX
+    </title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<div class="container">
+    <div class="d-flex justify-content-end">
+        <a href="/classes" class="btn btn-outline-secondary mb-4 ">&larr; Derslere Dön</a>
+    </div>
+
+    <body class="bg-dark text-white" style="padding-top: 100px; background-image: url('/images/classes-bg.png');">
+        <%- include('partials/navbar') %>
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <!-- Buraya temsili bir resim -->
+                    <img src="<%= details.bgImage %>" class="img-fluid rounded shadow" alt="Ders Detayı">
+                </div>
+                <div class="col-md-6">
+                    <h1 class="display-4 fw-bold text-warning text-uppercase">
+                        <%= details.name %>
+                    </h1>
+                    <p class="lead text-secondary mt-3">
+                        <%= details.info %>
+                    </p>
+
+                    <h5 class="mt-4 text-white">Uygun Saatler ve Rezervasyon:</h5>
+                    <div class="list-group bg-transparent">
+                        <% details.schedule.forEach(time=> { %>
+                            <div
+                                class="list-group-item bg-transparent border-secondary d-flex justify-content-between align-items-center px-0">
+                                <span class="text-white"><i class="fa-regular fa-clock text-warning me-2"></i>
+                                    <%= time %>
+                                </span>
+
+                                <!-- DURUM 1: GİRİŞ YAPMAMIŞ (MİSAFİR) -->
+                                <% if (!user) { %>
+                                    <a href="/register?returnTo=/classes/<%= details.urlId %>"
+                                        class="btn btn-sm btn-outline-light rounded-pill px-3">
+                                        Giriş Yap & Rezerve Et
+                                    </a>
+
+                                    <!-- DURUM 2: GİRİŞ YAPMIŞ AMA ÜYELİĞİ YOK/BİTMİŞ -->
+                                    <% } else if (!user.membership || !user.membership.isActive || new Date()> new
+                                        Date(user.membership.endDate)) { %>
+                                        <a href="/membership?returnTo=/classes/<%= details.urlId %>"
+                                            class="btn btn-sm btn-danger rounded-pill px-3">
+                                            Paket Satın Al
+                                        </a>
+                                        <% } else { %>
+                                            <form action="/reserve" method="POST" style="display:inline;">
+                                                <input type="hidden" name="className" value="<%= details.name %>">
+                                                <input type="hidden" name="dayTime" value="<%= time %>">
+                                                <button type="submit"
+                                                    class="btn btn-sm btn-outline-warning rounded-pill px-3">
+                                                    Rezerve Et <i class="fa-solid fa-check ms-1"></i>
+                                                </button>
+                                            </form>
+                                            <% } %>
+
+                            </div>
+
+                            <% }) %>
+                    </div>
+                </div>
+            </div>
+</div>
+<%- include('partials/footer') %>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    </body>
+
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Eğitmen Yönetimi - Admin</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="admin-page">
+
+    <%- include('../partials/admin-sidebar') %>
+
+    <div class="admin-content" id="mainContent">
+
+        <%- include('../partials/admin-navbar') %>
+
+            <div class="d-flex justify-content-between align-items-center m-3">
+                <h2 class="fw-bold text-dark">Eğitmen Kadrosu</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCoachModal">
+                    <i class="fa-solid fa-plus me-2"></i> Yeni Eğitmen Ekle
+                </button>
+            </div>
+
+            <!-- HOCA LİSTESİ -->
+            <div class="card border-0 shadow-sm m-3">
+                <div class="card-body p-0">
+                    <table class="table table-dark table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-4">Ad Soyad</th>
+                                <th>E-Posta</th>
+                                <th>Kayıt Tarihi</th>
+                                <th class="text-end pe-4">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(coaches.length===0) { %>
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-muted">Henüz eğitmen eklenmemiş.</td>
+                                </tr>
+                                <% } %>
+
+                                    <% coaches.forEach(coach=> { %>
+                                        <tr>
+                                            <td class="ps-4 fw-bold">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold text-dark"
+                                                        style="width: 40px; height: 40px;">
+                                                        <%= coach.fullName.charAt(0).toUpperCase() %>
+                                                    </div>
+                                                    <%= coach.fullName %>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <%= coach.email %>
+                                            </td>
+                                            <td>
+                                                <%= new Date(coach.createdAt).toLocaleDateString('tr-TR') %>
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <form action="/admin/coaches/delete" method="POST"
+                                                    onsubmit="return confirm('Bu eğitmeni silmek istediğinize emin misiniz?');">
+                                                    <input type="hidden" name="coachId" value="<%= coach._id %>">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                        <i class="fa-solid fa-trash"></i> Sil
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- YENİ HOCA EKLEME MODALI -->
+        <div class="modal fade" id="addCoachModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold">Yeni Eğitmen Oluştur</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/coaches/add" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Ad Soyad</label>
+                                <input type="text" name="fullName" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">E-Posta (Giriş için)</label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Şifre</label>
+                                <input type="text" name="password" class="form-control" value="123456" required>
+                                <small class="text-muted">Varsayılan şifre: 123456 (Hoca sonra değiştirebilir)</small>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary fw-bold">KAYDET</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/js/sideBar.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

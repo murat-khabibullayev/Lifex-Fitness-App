@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Admin Paneli - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css"> <!-- Ana stili de çekiyoruz -->
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="admin-page">
+
+    <!-- 1. SOL MENÜ (PARTIAL) -->
+    <%- include('../partials/admin-sidebar') %>
+
+        <!-- 2. SAĞ İÇERİK ALANI -->
+        <div class="admin-content" id="mainContent"> <!-- ID EKLENDİ -->
+            <%- include('../partials/admin-navbar') %>
+
+                <h2 class="fw-bold m-4">Genel Bakış</h2>
+
+                <!-- İSTATİSTİK KARTLARI -->
+                <div class="row g-4 m-3">
+
+                    <!-- Toplam Kazanç -->
+                    <div class="col-md-3">
+                        <div class="admin-card p-4 border-start border-5 border-success">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <small class="text-muted text-uppercase fw-bold">Toplam Ciro</small>
+                                    <h3 class="fw-bold text-success mb-0">
+                                        <%= stats.totalIncome.toLocaleString('tr-TR') %> ₺
+                                    </h3>
+                                </div>
+                                <div class="text-success opacity-50"><i class="fa-solid fa-coins fa-2x"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Aktif Öğrenci -->
+                    <div class="col-md-3">
+                        <div class="admin-card p-4 border-start border-5 border-primary">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <small class="text-muted text-uppercase fw-bold">Aktif Üyeler</small>
+                                    <h3 class="fw-bold text-primary mb-0">
+                                        <%= stats.studentCount %>
+                                    </h3>
+                                </div>
+                                <div class="text-primary opacity-50"><i class="fa-solid fa-users fa-2x"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Eğitmen Sayısı -->
+                    <div class="col-md-3">
+                        <div class="admin-card p-4 border-start border-5 border-warning">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <small class="text-muted text-uppercase fw-bold">Eğitmenler</small>
+                                    <h3 class="fw-bold text-warning mb-0">
+                                        <%= stats.coachCount %>
+                                    </h3>
+                                </div>
+                                <div class="text-warning opacity-50"><i class="fa-solid fa-user-tie fa-2x"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Potansiyel Üye -->
+                    <div class="col-md-3">
+                        <div class="admin-card p-4 border-start border-5 border-secondary">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <small class="text-muted text-uppercase fw-bold">Kayıtlı (Üye Değil)</small>
+                                    <h3 class="fw-bold text-secondary mb-0">
+                                        <%= stats.userCount %>
+                                    </h3>
+                                </div>
+                                <div class="text-secondary opacity-50"><i class="fa-regular fa-user fa-2x"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- GRAFİK BÖLÜMÜ -->
+                <div class="row m-3">
+                    <!-- Grafik 1: Paket Dağılımı -->
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white py-3 border-0">
+                                <h5 class="fw-bold mb-0 text-secondary"><i class="fa-solid fa-chart-pie me-2"></i> Paket
+                                    Tercihleri</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="planChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grafik 2: Kullanıcı Dağılımı -->
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white py-3 border-0">
+                                <h5 class="fw-bold mb-0 text-secondary"><i class="fa-solid fa-chart-bar me-2"></i>
+                                    Kullanıcı
+                                    Dağılımı</h5>
+                            </div>
+                            <div class="card-body" style="padding-top: 50%;">
+                                <canvas id="userChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SON İŞLEMLER TABLOSU -->
+                <div class="card shadow-sm border-0 m-4">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 fw-bold">Son Rezervasyon Hareketleri</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-dark table-hover mb-0 align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Öğrenci</th>
+                                    <th>Ders</th>
+                                    <th>Zaman</th>
+                                    <th>Durum</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% recentReservations.forEach(res=> { %>
+                                    <tr>
+                                        <td class="fw-bold">
+                                            <%= res.studentId ? res.studentId.fullName : 'Silinmiş Üye' %>
+                                        </td>
+                                        <td>
+                                            <%= res.className %>
+                                        </td>
+                                        <td>
+                                            <%= res.dayTime %>
+                                        </td>
+                                        <td>
+                                            <% if(res.status==='pending' ) { %> <span
+                                                    class="badge bg-warning text-dark">Bekliyor</span>
+                                                <% } %>
+                                                    <% if(res.status==='approved' ) { %> <span
+                                                            class="badge bg-success">Onaylandı</span>
+                                                        <% } %>
+                                                            <% if(res.status==='rejected' ) { %> <span
+                                                                    class="badge bg-danger">Reddedildi</span>
+                                                                <% } %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+        </div>
+        <script src="/js/sideBar.js"></script>
+        <!-- 1. Kütüphane -->
+        <script src="/js/chart.min.js"></script>
+
+        <!-- 2. Veri Transferi (Köprü) -->
+        <script>
+            window.gelenVeri = {
+                planLabels: <%- (charts && charts.planLabels) ? charts.planLabels : '[]' %>,
+                planData: <%- (charts && charts.planData) ? charts.planData : '[]' %>,
+                userLabels: <%- (charts && charts.userLabels) ? charts.userLabels : '[]' %>,
+                userData: <%- (charts && charts.userData) ? charts.userData : '[]' %>
+    };
+        </script>
+
+        <script src="/js/admin.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

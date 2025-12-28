@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFEX - Geleceğin Fitness Asistanı</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Google Fonts ve İkonlar -->
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="home-page">
+
+    <!-- Navbar Partial -->
+    <%- include('partials/navbar') %>
+
+        <!-- 1. HERO SECTION (Kapak) -->
+        <header class="hero-section d-flex align-items-center text-center">
+            <div class="overlay"></div>
+            <div class="container position-relative z-2">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h1 class="display-3 fw-bold text-white mb-4 animate-up">
+                            Vücudunun <span class="text-gradient">Potansiyelini</span> Keşfet
+                        </h1>
+                        <p class="lead text-light mb-5 animate-up delay-1">
+                            Sıradan listelerden sıkıldın mı? Lifex, genetiğine ve hedeflerine uygun beslenme ve
+                            antrenman programını saniyeler içinde hazırlar.
+                        </p>
+                        <div class="d-flex justify-content-center gap-3 animate-up delay-2">
+                            <!-- Kullanıcı varsa Panele, yoksa Kayıt sayfasına -->
+                            <% if (typeof user !=='undefined' && user) { %>
+                                <a href="/dashboard/<%= user._id %>"
+                                    class="btn btn-primary btn-lg px-5 py-3 fw-bold rounded-pill shadow-lg">
+                                    PANELE GİT <i class="fa-solid fa-arrow-right ms-2"></i>
+                                </a>
+                                <% } else { %>
+                                    <a href="/register"
+                                        class="btn btn-primary btn-lg px-5 py-3 fw-bold rounded-pill shadow-lg">
+                                        ÜCRETSİZ BAŞLA
+                                    </a>
+                                    <% } %>
+                                        <a href="#how-it-works"
+                                            class="btn btn-outline-light btn-lg px-5 py-3 fw-bold rounded-pill">NASIL
+                                            ÇALIŞIR?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- İSTATİSTİK ŞERİDİ -->
+        <div class="stats-bar py-4 bg-dark border-top border-bottom border-secondary">
+            <div class="container">
+                <div class="row text-center text-white">
+                    <div class="col-md-3 col-6 mb-3 mb-md-0">
+                        <h2 class="fw-bold text-warning mb-0">500+</h2>
+                        <small class="text-muted">Mutlu Üye</small>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3 mb-md-0">
+                        <h2 class="fw-bold text-warning mb-0">1200+</h2>
+                        <small class="text-muted">Oluşturulan Diyet</small>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <h2 class="fw-bold text-warning mb-0">850+</h2>
+                        <small class="text-muted">Antrenman Planı</small>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <h2 class="fw-bold text-warning mb-0">%98</h2>
+                        <small class="text-muted">Başarı Oranı</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NASIL ÇALIŞIR? -->
+        <section id="how-it-works" class="py-5 bg-black text-white">
+            <div class="container py-5">
+                <div class="text-center mb-5">
+                    <small class="text-primary fw-bold text-uppercase">Süreç</small>
+                    <h2 class="fw-bold display-5">Nasıl Çalışır?</h2>
+                    <p class="text-muted">Hayalindeki vücuda ulaşmak sadece 3 adım.</p>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Adım 1 -->
+                    <div class="col-md-4">
+                        <div class="step-card text-center p-4">
+                            <div class="icon-circle bg-dark mb-4 mx-auto">
+                                <i class="fa-solid fa-user-plus fa-2x text-primary"></i>
+                            </div>
+                            <h4>1. Profilini Oluştur</h4>
+                            <p class="text-secondary">Yaş, boy, kilo ve hedeflerini sisteme gir. Yapay zeka senin için
+                                BMR ve TDEE analizini yapsın.</p>
+                        </div>
+                    </div>
+                    <!-- Adım 2 -->
+                    <div class="col-md-4">
+                        <div class="step-card text-center p-4">
+                            <div class="icon-circle bg-dark mb-4 mx-auto">
+                                <i class="fa-solid fa-wand-magic-sparkles fa-2x text-warning"></i>
+                            </div>
+                            <h4>2. Programını Al</h4>
+                            <p class="text-secondary">Tek tıkla sana özel kalori hesaplı yemek listesi ve video destekli
+                                antrenman programı oluşturulsun.</p>
+                        </div>
+                    </div>
+                    <!-- Adım 3 -->
+                    <div class="col-md-4">
+                        <div class="step-card text-center p-4">
+                            <div class="icon-circle bg-dark mb-4 mx-auto">
+                                <i class="fa-solid fa-trophy fa-2x text-success"></i>
+                            </div>
+                            <h4>3. Harekete Geç</h4>
+                            <p class="text-secondary">Panelinden gelişimini takip et, listelerini uygula ve değişimin
+                                tadını çıkar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. ÖZELLİKLER (GLASSMORPHISM) -->
+        <section class="py-5 position-relative"
+            style="background-image: url('/images/home-bg.jpg'); background-attachment: fixed; background-size: cover;">
+            <div class="overlay" style="background: rgba(0,0,0,0.8);"></div>
+            <div class="container position-relative z-2 py-5">
+                <div class="text-center mb-5 text-white">
+                    <h2 class="fw-bold display-5">Neden Lifex?</h2>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="glass-card p-4 h-100">
+                            <i class="fa-solid fa-calculator fa-3x text-info mb-3"></i>
+                            <h4>Akıllı Hesaplama</h4>
+                            <p class="text-light opacity-75">Mifflin-St Jeor formülü ile nokta atışı kalori ve makro
+                                hesabı.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="glass-card p-4 h-100">
+                            <i class="fa-solid fa-utensils fa-3x text-warning mb-3"></i>
+                            <h4>Dinamik Beslenme</h4>
+                            <p class="text-light opacity-75">Sıkıcı diyetler yok. Her gün farklı ve lezzetli menüler.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="glass-card p-4 h-100">
+                            <i class="fa-solid fa-dumbbell fa-3x text-danger mb-3"></i>
+                            <h4>Video Antrenman</h4>
+                            <p class="text-light opacity-75">Hangi hareketi nasıl yapacağım derdine son. YouTube
+                                destekli rehber.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

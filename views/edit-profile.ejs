@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Profili Düzenle - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="bg-settings-page" style="padding-top: 100px;"> <!-- Ayarlar sayfası ile aynı arka plan -->
+
+    <%- include('partials/navbar') %>
+
+        <div class="container pb-5">
+            <div class="row justify-content-center">
+                <div class="card login-card-design col-md-8">
+
+                    <h3 class="fw-bold text-white mb-4"><i class="fa-solid fa-user-pen me-2"></i> Profili Düzenle</h3>
+
+                    <!-- DÜZENLEME KARTI -->
+                    <div class="card shadow-lg border-0 mb-4">
+                        <div class="card-body p-4 p-md-5">
+
+                            <form action="/settings/update" method="POST" enctype="multipart/form-data">
+
+                                <!-- 1. TEMEL BİLGİLER -->
+                                <!-- PROFİL FOTOĞRAFI YÜKLEME -->
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-auto">
+                                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center overflow-hidden"
+                                            style="width: 80px; height: 80px;">
+                                            <% if(user.profileImage) { %>
+                                                <img src="<%= user.profileImage %>"
+                                                    class="w-100 h-100 object-fit-cover">
+                                                <% } else { %>
+                                                    <span class="fs-2 fw-bold text-white">
+                                                        <%= user.fullName.charAt(0).toUpperCase() %>
+                                                    </span>
+                                                    <% } %>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label text-white small">Profil Fotoğrafı</label>
+                                        <input type="file" name="profileImage"
+                                            class="form-control form-control-sm bg-dark text-white border-secondary"
+                                            accept="image/*">
+                                        <div class="form-text text-muted small">Maksimum 2MB, JPG veya PNG.</div>
+                                    </div>
+                                </div>
+                                <h5 class="text-warning border-bottom border-secondary pb-2 mb-3">Temel Bilgiler</h5>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Ad Soyad</label>
+                                        <input type="text" name="fullName" class="form-control"
+                                            value="<%= user.fullName %>" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">E-Posta (Değiştirilemez)</label>
+                                        <input type="email" class="form-control text-muted" value="<%= user.email %>"
+                                            disabled style="opacity: 0.7;">
+                                    </div>
+                                </div>
+
+                                <!-- 2. FİZİKSEL ÖZELLİKLER -->
+                                <h5 class="text-info border-bottom border-secondary pb-2 mb-3">Fiziksel Özellikler</h5>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Cinsiyet</label>
+                                        <select name="gender" class="form-select">
+                                            <option value="male" <%=user.gender==='male' ? 'selected' : '' %>>Erkek
+                                            </option>
+                                            <option value="female" <%=user.gender==='female' ? 'selected' : '' %>>Kadın
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Yaş</label>
+                                        <input type="number" name="age" class="form-control" value="<%= user.age %>">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Boy (cm)</label>
+                                        <input type="number" name="height" class="form-control"
+                                            value="<%= user.height %>">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Kilo (kg)</label>
+                                        <input type="number" name="weight" class="form-control"
+                                            value="<%= user.weight %>">
+                                    </div>
+                                </div>
+
+                                <!-- 3. VÜCUT ÖLÇÜLERİ (YENİ) -->
+                                <h5 class="text-success border-bottom border-secondary pb-2 mb-3">Vücut Ölçüleri (cm)
+                                </h5>
+                                <p class="small text-muted mb-3">Vücut yağ oranı hesaplaması için gereklidir.</p>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-3 col-6">
+                                        <label class="form-label small text-muted">Boyun</label>
+                                        <input type="number" name="neck" class="form-control"
+                                            value="<%= user.measurements ? user.measurements.neck : 0 %>">
+                                    </div>
+                                    <div class="col-md-3 col-6">
+                                        <label class="form-label small text-muted">Bel</label>
+                                        <input type="number" name="waist" class="form-control"
+                                            value="<%= user.measurements ? user.measurements.waist : 0 %>">
+                                    </div>
+                                    <div class="col-md-3 col-6">
+                                        <label class="form-label small text-muted">Kalça</label>
+                                        <input type="number" name="hip" class="form-control"
+                                            value="<%= user.measurements ? user.measurements.hip : 0 %>">
+                                    </div>
+                                    <div class="col-md-3 col-6">
+                                        <label class="form-label small text-muted">Göğüs</label>
+                                        <input type="number" name="chest" class="form-control"
+                                            value="<%= user.measurements ? user.measurements.chest : 0 %>">
+                                    </div>
+                                </div>
+
+                                <!-- 4. HEDEF VE AKTİVİTE -->
+                                <h5 class="text-primary border-bottom border-secondary pb-2 mb-3">Hedefler</h5>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Hedefiniz</label>
+                                        <select name="goal" class="form-select">
+                                            <option value="lose" <%=user.goal==='lose' ? 'selected' : '' %>>Kilo Vermek
+                                            </option>
+                                            <option value="gain" <%=user.goal==='gain' ? 'selected' : '' %>>Kilo Almak /
+                                                Kas</option>
+                                            <option value="maintain" <%=user.goal==='maintain' ? 'selected' : '' %>
+                                                >Formu Korumak</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-muted">Aktivite Seviyesi</label>
+                                        <select name="activityLevel" class="form-select">
+                                            <option value="1.2" <%=user.activityLevel==1.2 ? 'selected' : '' %>
+                                                >Hareketsiz (Masa başı)</option>
+                                            <option value="1.375" <%=user.activityLevel==1.375 ? 'selected' : '' %>>Az
+                                                Hareketli (Haftada 1-3 gün)</option>
+                                            <option value="1.55" <%=user.activityLevel==1.55 ? 'selected' : '' %>>Orta
+                                                Hareketli (Haftada 3-5 gün)</option>
+                                            <option value="1.725" <%=user.activityLevel==1.725 ? 'selected' : '' %>>Çok
+                                                Hareketli (Haftada 6-7 gün)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- BUTONLAR -->
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-warning btn-lg fw-bold text-dark">
+                                        <i class="fa-solid fa-floppy-disk me-2"></i> DEĞİŞİKLİKLERİ KAYDET
+                                    </button>
+                                    <a href="/profile" class="btn btn-outline-light">İptal Et / Geri Dön</a>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- HESAP SİLME (TEHLİKELİ BÖLGE) -->
+                    <div class="card border border-danger bg-transparent">
+                        <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-danger fw-bold mb-1">Hesabı Sil</h6>
+                                <p class="text-secondary small mb-0">Bu işlem geri alınamaz.</p>
+                            </div>
+                            <form action="/settings/delete" method="POST"
+                                onsubmit="return confirm('Hesabınızı ve tüm verilerinizi silmek istediğinize emin misiniz?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Hesabımı Sil</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

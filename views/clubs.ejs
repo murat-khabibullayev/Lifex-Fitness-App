@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Kulüplerimiz - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-dark text-white" style="padding-top: 100px; background-image: url('/images/clubs-bg.png');">
+    <%- include('partials/navbar') %>
+
+        <div class="container">
+
+            <!-- FİLTRE ALANI -->
+            <div class="filter-container mb-5 p-4 rounded-3 shadow-lg"
+                style="background-color: rgba(33, 37, 41, 0.95); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="row g-3">
+                    <!-- Şehir Filtresi -->
+                    <div class="col-md-3">
+                        <select id="cityFilter" class="form-select bg-dark text-white border-secondary">
+                            <option value="all">Tüm Şehirler</option>
+                            <option value="İstanbul">İstanbul</option>
+                            <option value="Ankara">Ankara</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="districtFilter" class="form-select bg-dark text-white border-secondary">
+                            <option value="all">Tüm İlçeler</option>
+                            <option value="Üsküdar">Üsküdar</option>
+                            <option value="Zeytunburnu">Zeytunburnu</option>
+                            <option value="Şişli">Şişli</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="tagFilter" class="form-select bg-dark text-white border-secondary">
+                            <option value="all">Tüm İmkanlar</option>
+                            <option value="Havuz">Havuz</option>
+                            <option value="Spa">Spa & Sauna</option>
+                            <option value="Otopark">Otopark</option>
+                            <option value="Wifi">Wifi</option>
+                            <option value="Crossfit">Crossfit</option>
+                        </select>
+                    </div>
+                    <!-- Harita Butonu -->
+                    <div class="col-md-3 d-grid">
+                        <button id="toggleMapBtn" class="btn btn-danger fw-bold" onclick="toggleMapView()">
+                            <i class="fa-solid fa-map-location-dot me-2"></i> HARİTA GÖRÜNÜMÜ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="fw-bold mb-4">Tüm Kulüpler</h2>
+
+            <!-- KULÜP LİSTESİ -->
+            <div class="row g-4" id="clubsContainer">
+                <% clubs.forEach(club=> { %>
+                    <!-- Her karta data-city ve data-district veriyoruz ki JS ile bulabilelim -->
+                    <div class="col-md-4 club-item" data-city="<%= club.city %>" data-district="<%= club.district %>"
+                        data-tags="<%= club.tags.join(',') %>">
+
+                        <div class="card bg-dark border-secondary h-100 overflow-hidden shadow-lg hover-scale">
+
+                            <!-- GÖRSEL ALANI  -->
+                            <div class="media-container" style="height: 250px; position: relative;">
+                                <!-- Resim -->
+                                <img src="<%= club.image %>" class="w-100 h-100 object-fit-cover club-image"
+                                    alt="<%= club.name %>">
+                                <!-- Harita (Başlangıçta gizli) -->
+                                <iframe src="<%= club.mapUrl %>" class="w-100 h-100 club-map d-none" style="border:0;"
+                                    allowfullscreen="" loading="lazy"></iframe>
+                                <!-- KART ÜZERİNDE ROZETLER -->
+                                <div class="position-absolute top-0 end-0 p-2">
+                                    <% if(club.tags.includes('Havuz')) { %> <span class="badge bg-primary">Havuz</span>
+                                        <% } %>
+                                            <% if(club.tags.includes('Spa')) { %> <span
+                                                    class="badge bg-info text-dark">Spa</span>
+                                                <% } %>
+                                </div>
+                            </div>
+
+
+                            <div class="card-body">
+                                <h4 class="fw-bold text-white">
+                                    <%= club.name %>
+                                </h4>
+                                <p class="text-secondary small">
+                                    <i class="fa-solid fa-location-dot me-1 text-danger"></i>
+                                    <%= club.district %> / <%= club.city %>
+                                </p>
+                                <div class="mb-3">
+                                    <% club.tags.forEach(tag=> { %>
+                                        <span
+                                            class="badge bg-secondary bg-opacity-25 border border-secondary text-light fw-normal me-1 mb-1">
+                                            <%= tag %>
+                                        </span>
+                                        <% }) %>
+                                </div>
+                                <a href="/clubs/<%= club._id %>" class="btn btn-outline-warning w-100 mt-2 fw-bold">SPOR
+                                    SALONU DETAYI</a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+
+                        <!-- Sonuç Bulunamadı Mesajı -->
+                        <div id="noResults" class="col-12 text-center d-none mt-5">
+                            <i class="fa-solid fa-circle-exclamation fa-3x text-secondary mb-3"></i>
+                            <h4 class="text-secondary">Aradığınız kriterlere uygun kulüp bulunamadı.</h4>
+                        </div>
+            </div>
+        </div>
+
+        <!-- JAVASCRIPT: FİLTRELEME VE HARİTA MANTIĞI -->
+        <script>
+            // 1. FİLTRELEME FONKSİYONU
+            const cityFilter = document.getElementById('cityFilter');
+            const districtFilter = document.getElementById('districtFilter');
+            const clubItems = document.querySelectorAll('.club-item');
+            const noResults = document.getElementById('noResults');
+
+            function filterClubs() {
+                const selectedCity = cityFilter.value;
+                const selectedDistrict = districtFilter.value;
+                const selectedTag = tagFilter.value;
+                let visibleCount = 0;
+
+                clubItems.forEach(item => {
+                    const itemCity = item.getAttribute('data-city');
+                    const itemDistrict = item.getAttribute('data-district');
+                    const itemTags = item.getAttribute('data-tags').split(',');
+
+                    // Mantık: (Şehir uyuyor mu VEYA hepsi mi?) VE (İlçe uyuyor mu VEYA hepsi mi?)
+                    const cityMatch = (selectedCity === 'all') || (itemCity === selectedCity);
+                    const districtMatch = (selectedDistrict === 'all') || (itemDistrict === selectedDistrict);
+                    const tagMatch = (selectedTag === 'all') || (itemTags.includes(selectedTag));
+
+                    if (cityMatch && districtMatch && tagMatch) {
+                        item.style.display = 'block'; // Göster
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none'; // Gizle
+                    }
+                });
+
+                // Hiç sonuç yoksa uyarı göster
+                if (visibleCount === 0) {
+                    noResults.classList.remove('d-none');
+                } else {
+                    noResults.classList.add('d-none');
+                }
+            }
+
+            // Dropdown değişince fonksiyonu çalıştır
+            cityFilter.addEventListener('change', filterClubs);
+            districtFilter.addEventListener('change', filterClubs);
+            tagFilter.addEventListener('change', filterClubs);
+
+            // 2. HARİTA GÖRÜNÜMÜNÜ AÇ/KAPA
+            let isMapMode = false;
+            const toggleBtn = document.getElementById('toggleMapBtn');
+
+            function toggleMapView() {
+                isMapMode = !isMapMode; // Durumu tersine çevir
+                const images = document.querySelectorAll('.club-image');
+                const maps = document.querySelectorAll('.club-map');
+
+                if (isMapMode) {
+                    // Harita Modu
+                    images.forEach(img => img.classList.add('d-none'));
+                    maps.forEach(map => map.classList.remove('d-none'));
+                    toggleBtn.innerHTML = '<i class="fa-solid fa-image me-2"></i> LİSTE GÖRÜNÜMÜ';
+                    toggleBtn.classList.replace('btn-danger', 'btn-primary');
+                } else {
+                    // Resim Modu
+                    images.forEach(img => img.classList.remove('d-none'));
+                    maps.forEach(map => map.classList.add('d-none'));
+                    toggleBtn.innerHTML = '<i class="fa-solid fa-map-location-dot me-2"></i> HARİTA GÖRÜNÜMÜ';
+                    toggleBtn.classList.replace('btn-primary', 'btn-danger');
+                }
+            }
+
+        </script>
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

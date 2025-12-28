@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Mesajlarım - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="bg-profile-page" style="padding-top: 100px;"> <!-- Profil arka planı uyumlu olur -->
+
+    <%- include('partials/navbar') %>
+
+        <!-- FLASH MESAJ (Varsa göster) -->
+        <% if (typeof alert !=='undefined' && alert) { %>
+            <div class="custom-alert slide-in-right">
+                <span>
+                    <%= alert.message %>
+                </span>
+                <button type="button" class="btn-close btn-close-white ms-3"
+                    onclick="this.parentElement.parentElement.remove()"></button>
+            </div>
+            <% } %>
+
+                <div class="container pb-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-10">
+
+                            <h3 class="text-white mb-4 fw-bold"><i class="fa-solid fa-envelope-open-text me-2"></i>
+                                Mesaj Merkezi</h3>
+
+                            <div class="card shadow-lg border-0"
+                                style="background-color: rgba(0,0,0,0.85); backdrop-filter: blur(10px); color: white;">
+                                <div class="card-header bg-transparent border-secondary">
+                                    <ul class="nav nav-tabs card-header-tabs" id="msgTabs" role="tablist">
+                                        <!-- Sekmeler -->
+                                        <li class="nav-item">
+                                            <button class="nav-link active text-warning bg-transparent border-0"
+                                                data-bs-toggle="tab" data-bs-target="#inbox">
+                                                <i class="fa-solid fa-inbox me-2"></i>Gelen Kutusu
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link text-secondary bg-transparent border-0"
+                                                data-bs-toggle="tab" data-bs-target="#compose">
+                                                <i class="fa-solid fa-pen me-2"></i>Yeni Mesaj
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link text-secondary bg-transparent border-0"
+                                                data-bs-toggle="tab" data-bs-target="#outbox">
+                                                <i class="fa-solid fa-paper-plane me-2"></i>Gidenler
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="card-body p-4">
+                                    <div class="tab-content">
+
+                                        <!-- 1. GELEN KUTUSU -->
+                                        <div class="tab-pane fade show active" id="inbox">
+                                            <% if (inbox.length===0) { %>
+                                                <div class="text-center py-5 text-muted">
+                                                    <i class="fa-regular fa-envelope fa-3x mb-3"></i>
+                                                    <p>Henüz gelen mesajınız yok.</p>
+                                                </div>
+                                                <% } else { %>
+                                                    <div class="list-group list-group-flush">
+                                                        <% inbox.forEach(msg=> { %>
+                                                            <div
+                                                                class="list-group-item bg-transparent border-secondary text-white py-3">
+                                                                <div class="d-flex justify-content-between mb-2">
+                                                                    <strong class="text-warning">
+                                                                        <%= msg.senderId ? msg.senderId.fullName
+                                                                            : 'Silinmiş Üye' %>
+                                                                    </strong>
+                                                                    <small class="text-muted">
+                                                                        <%= new
+                                                                            Date(msg.createdAt).toLocaleDateString('tr-TR')
+                                                                            %>
+                                                                    </small>
+                                                                </div>
+                                                                <p class="mb-1 text-light opacity-75">
+                                                                    <%= msg.content %>
+                                                                </p>
+                                                                <a href="#" onclick="replyTo('<%= msg.senderId._id %>')"
+                                                                    class="btn btn-sm btn-outline-secondary mt-2">Yanıtla</a>
+                                                            </div>
+                                                            <% }) %>
+                                                    </div>
+                                                    <% } %>
+                                        </div>
+
+                                        <!-- 2. YENİ MESAJ YAZ -->
+                                        <div class="tab-pane fade" id="compose">
+                                            <form action="/messages/send" method="POST">
+                                                <div class="mb-3">
+                                                    <label class="form-label text-secondary">Alıcı Seçin</label>
+                                                    <select name="receiverId" id="receiverSelect"
+                                                        class="form-select bg-dark text-white border-secondary"
+                                                        required>
+                                                        <option value="" selected disabled>Kime göndereceksiniz?
+                                                        </option>
+                                                        <% recipients.forEach(person=> { %>
+                                                            <option value="<%= person._id %>">
+                                                                <%= person.fullName %> (<%= user.role==='student'
+                                                                        ? 'Eğitmen' : 'Öğrenci' %>)
+                                                            </option>
+                                                            <% }) %>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label text-secondary">Mesajınız</label>
+                                                    <textarea name="content"
+                                                        class="form-control bg-dark text-white border-secondary"
+                                                        rows="5" placeholder="Buraya yazın..." required></textarea>
+                                                </div>
+                                                <button type="submit"
+                                                    class="btn btn-warning w-100 fw-bold text-dark">GÖNDER <i
+                                                        class="fa-solid fa-paper-plane ms-2"></i></button>
+                                            </form>
+                                        </div>
+
+                                        <!-- 3. GİDEN KUTUSU -->
+                                        <div class="tab-pane fade" id="outbox">
+                                            <% if (outbox.length===0) { %>
+                                                <p class="text-center text-muted py-4">Hiç mesaj göndermediniz.</p>
+                                                <% } else { %>
+                                                    <div class="list-group list-group-flush">
+                                                        <% outbox.forEach(msg=> { %>
+                                                            <div
+                                                                class="list-group-item bg-transparent border-secondary text-white py-3">
+                                                                <div class="d-flex justify-content-between">
+                                                                    <span class="text-info">Alıcı: <%= msg.receiverId ?
+                                                                            msg.receiverId.fullName : 'Silinmiş Üye' %>
+                                                                            </span>
+                                                                    <small class="text-muted">
+                                                                        <%= new
+                                                                            Date(msg.createdAt).toLocaleDateString('tr-TR')
+                                                                            %>
+                                                                    </small>
+                                                                </div>
+                                                                <p class="mb-0 mt-1 small opacity-75">
+                                                                    <%= msg.content %>
+                                                                </p>
+                                                            </div>
+                                                            <% }) %>
+                                                    </div>
+                                                    <% } %>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    // Yanıtla butonuna basınca otomatik olarak 'Yeni Mesaj' sekmesini açıp kişiyi seçer
+                    function replyTo(userId) {
+                        // Yeni Mesaj sekmesini aç
+                        const triggerEl = document.querySelector('button[data-bs-target="#compose"]');
+                        const tab = new bootstrap.Tab(triggerEl);
+                        tab.show();
+
+                        // Kişiyi seç
+                        const select = document.getElementById('receiverSelect');
+                        select.value = userId;
+                    }
+                </script>
+
+                <%- include('partials/footer') %>
+                    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

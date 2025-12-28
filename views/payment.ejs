@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Güvenli Ödeme - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="bg-dark text-white" style="padding-top: 100px; background-image: url('/images/payment-bg.png');">
+
+    <%- include('partials/navbar') %>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card bg-black border-secondary shadow-lg">
+                        <div class="card-header bg-transparent border-secondary text-center py-4">
+                            <h3 class="text-warning"><i class="fa-solid fa-lock me-2"></i> Güvenli Ödeme</h3>
+                        </div>
+                        <div class="card-body p-5">
+
+                            <div class="alert bg-opacity-10 border-info">
+                                <b>Seçilen Paket:</b>
+                                <%= plan.name %> (<%= plan.durationMonths %> Ay)<br>
+
+                                        <% if (discountRate> 0) { %>
+                                            <!-- İndirim Varsa -->
+                                            <span class="text-decoration-line-through text-secondary me-2">
+                                                <%= plan.price %>₺
+                                            </span>
+                                            <span class="fw-bold fs-4">
+                                                <%= finalPrice %>₺
+                                            </span>
+                                            <br>
+                                            <!-- Özel Mesajı Yazdır -->
+                                            <span class="badge bg-success mt-2"><i class="fa-solid fa-tag me-1"></i>
+                                                <%= discountMessage %>
+                                            </span>
+                                            <% } else { %>
+                                                <!-- İndirim Yoksa -->
+                                                <b>Tutar:<b>
+                                                        <%= plan.price %>₺
+                                                            <% } %>
+                            </div>
+
+                            <form action="/payment/process" method="POST">
+                                <input type="hidden" name="planId" value="<%= plan._id %>">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Kart Üzerindeki İsim</label>
+                                    <input type="text" class="form-control bg-dark text-white border-secondary"
+                                        placeholder="Ad Soyad" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Kart Numarası</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-dark border-secondary text-secondary"><i
+                                                class="fa-regular fa-credit-card"></i></span>
+                                        <input type="text" class="form-control bg-dark text-white border-secondary"
+                                            placeholder="0000 0000 0000 0000" maxlength="16" required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6 mb-3">
+                                        <label class="form-label">Ay / Yıl</label>
+                                        <input type="text" class="form-control bg-dark text-white border-secondary"
+                                            placeholder="MM/YY" maxlength="5" required>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label class="form-label">CVV</label>
+                                        <input type="text" class="form-control bg-dark text-white border-secondary"
+                                            placeholder="123" maxlength="3" required>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-success w-100 btn-lg fw-bold mt-3">
+                                    <i class="fa-solid fa-check-circle me-2"></i>
+                                    <%= plan.price %>₺ ÖDE VE ÜYE OL
+                                </button>
+                            </form>
+
+                            <div class="text-center mt-3">
+                                <small class="text-muted"><i class="fa-solid fa-shield-halved me-1"></i> 256-bit SSL
+                                    Korumalı Ödeme</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

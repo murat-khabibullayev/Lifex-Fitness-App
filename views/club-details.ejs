@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>
+        <%= club.name %> - LIFEX
+    </title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-dark text-white" style="padding-top: 80px; background-image: url('/images/clubs-bg.png');">
+    <%- include('partials/navbar') %>
+
+        <!-- HERO KISMI -->
+        <div class="position-relative" style="height: 400px;">
+            <img src="<%= club.image %>" class="w-100 h-100 object-fit-cover" style="filter: brightness(0.5);">
+            <div class="position-absolute top-50 start-50 translate-middle text-center w-100">
+                <h1 class="display-3 fw-bold text-uppercase">
+                    <%= club.name %>
+                </h1>
+                <p class="lead">
+                    <%= club.city %>
+                </p>
+                <% if (typeof user==='undefined' && !user || typeof user !=='undefined' && user && user.role==='user' )
+                    { %>
+                    <a href="/membership" class="btn btn-danger btn-lg px-5 fw-bold rounded-pill">BİZE KATIL</a>
+                    <% } %>
+            </div>
+        </div>
+
+        <!-- BİLGİLER -->
+        <div class="bg-black py-4 border-bottom border-secondary">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md-4 border-end border-secondary">
+                        <h5 class="text-warning">📍 Adres</h5>
+                        <small class="text-secondary">
+                            <%= club.address %>
+                        </small>
+                    </div>
+                    <div class="col-md-4 border-end border-secondary">
+                        <h5 class="text-warning">🕒 Çalışma Saatleri</h5>
+                        <small class="text-secondary">
+                            <%= club.hours %>
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="text-warning">📞 İletişim</h5>
+                        <small class="text-secondary">
+                            <%= club.phone %>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HAKKINDA -->
+        <div class="container py-5 text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-3">KULÜP HAKKINDA</h2>
+                    <p class="lead text-secondary">
+                        <%= club.description %>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- İMKANLAR (Zikzak Düzen) -->
+        <div class="container-fluid p-0">
+            <% club.facilities.forEach((facility, index)=> { %>
+                <div class="row g-0 align-items-center mb-0">
+                    <% if(index % 2===0) { %>
+                        <!-- Çift Sıra: Resim Solda, Yazı Sağda -->
+                        <div class="col-md-6">
+                            <img src="<%= facility.image %>" class="w-100" style="height: 500px; object-fit: cover;">
+                        </div>
+                        <div class="col-md-6 p-5 bg-dark">
+                            <h3 class="fw-bold text-uppercase mb-4">
+                                <%= facility.title %>
+                            </h3>
+                            <p class="text-secondary fs-5">
+                                <%= facility.text %>
+                            </p>
+                        </div>
+                        <% } else { %>
+                            <!-- Tek Sıra: Yazı Solda, Resim Sağda -->
+                            <div class="col-md-6 p-5 bg-dark order-2 order-md-1">
+                                <h3 class="fw-bold text-uppercase mb-4">
+                                    <%= facility.title %>
+                                </h3>
+                                <p class="text-secondary fs-5">
+                                    <%= facility.text %>
+                                </p>
+                            </div>
+                            <div class="col-md-6 order-1 order-md-2">
+                                <img src="<%= facility.image %>" class="w-100"
+                                    style="height: 500px; object-fit: cover;">
+                            </div>
+                            <% } %>
+                </div>
+                <% }) %>
+        </div>
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

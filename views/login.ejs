@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="bg-auth-page">
+
+    <!-- NAVBAR -->
+    <%- include('partials/navbar') %>
+
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+
+                    <!-- GÜNCELLENMİŞ KART TASARIMI -->
+                    <div class="card login-card-design h-100">
+                        <div class="card-header bg-transparent text-center py-4 border-0">
+                            <h3 class="fw-bold text-white">Tekrar Hoş Geldiniz</h3>
+                            <p class="text-white-50 mb-0">Hesabınıza giriş yapın</p>
+                        </div>
+
+                        <div class="card-body p-4">
+                            <form action="/login" method="POST">
+
+                                <div class="mb-3">
+                                    <label class="form-label">E-Posta Adresi</label>
+                                    <input type="email" name="email" class="form-control" required
+                                        placeholder="mail@ornek.com">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label">Şifre</label>
+                                    <input type="password" name="password" class="form-control" required>
+                                </div>
+
+                                <!-- SARI BUTON SINIFI EKLENDİ -->
+                                <button type="submit" class="btn btn-login-custom w-100 py-2">Giriş Yap</button>
+                            </form>
+
+                            <div class="text-center mt-4">
+                                <small class="text-muted">Hesabınız yok mu? <a href="/register"
+                                        class="text-warning text-decoration-none fw-bold">Hemen Kaydolun</a></small>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER EKLENDİ (Bütünlük İçin) -->
+        <%- include('partials/footer') %>
+
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

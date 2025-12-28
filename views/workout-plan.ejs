@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Spor Programım - Lifex</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-workout-page">
+
+    <%- include('partials/navbar') %>
+
+        <div class="container py-5">
+
+            <!-- BAŞLIK VE BUTON HİZALAMA (GRID) -->
+            <div class="row align-items-center mb-4">
+                <!-- Sol Boşluk -->
+                <div class="col-md-3 d-none d-md-block"></div>
+
+                <!-- Orta Başlık -->
+                <div class="col-md-6 text-center">
+                    <h2 class="fw-bold mb-0">Haftalık Antrenman Planın</h2>
+                </div>
+
+                <!-- Sağ Buton -->
+                <div class="col-md-3 text-center text-md-end mt-3 mt-md-0">
+                    <!-- Arka plan koyu olduğu için btn-outline-light yaptık ki görünsün -->
+                    <a href="/dashboard/<%= user._id %>" class="btn btn-outline-light">Panele Dön</a>
+                </div>
+            </div>
+
+            <!-- TAVSİYE KUTUSU -->
+            <div class="text-center mb-5">
+                <div class="alert alert-warning d-inline-block">
+                    <strong>Özel Tavsiye:</strong>
+                    <%= advice %>
+                </div>
+            </div>
+
+            <!-- KARTLARIN BAŞLADIĞI YER -->
+            <div class="row g-4">
+
+                <!-- 1. GÜN KARTLARI -->
+                <div class="col-lg-4">
+                    <div class="card shadow border-0 h-100">
+                        <div class="day-header bg-danger">
+                            <h4 class="mb-0">1. GÜN</h4>
+                            <small>Göğüs & Omuz (İtme)</small>
+                        </div>
+                        <div class="card-body">
+                            <% plan.day1.forEach(exercise=> { %>
+                                <div class="mb-4">
+                                    <h6><strong>
+                                            <%= exercise.name %>
+                                        </strong></h6>
+                                    <div class="video-container">
+                                        <iframe src="<%= exercise.videoUrl %>" frameborder="0" allowfullscreen></iframe>
+                                    </div>
+                                    <span class="badge bg-secondary">
+                                        <%= exercise.difficulty %>
+                                    </span>
+                                </div>
+                                <hr>
+                                <% }) %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. GÜN KARTLARI -->
+                <div class="col-lg-4">
+                    <div class="card shadow border-0 h-100">
+                        <div class="day-header bg-primary">
+                            <h4 class="mb-0">2. GÜN</h4>
+                            <small>Bacak (Leg Day)</small>
+                        </div>
+                        <div class="card-body">
+                            <% plan.day2.forEach(exercise=> { %>
+                                <div class="mb-4">
+                                    <h6><strong>
+                                            <%= exercise.name %>
+                                        </strong></h6>
+                                    <div class="video-container">
+                                        <iframe src="<%= exercise.videoUrl %>" frameborder="0" allowfullscreen></iframe>
+                                    </div>
+                                    <span class="badge bg-secondary">
+                                        <%= exercise.difficulty %>
+                                    </span>
+                                </div>
+                                <hr>
+                                <% }) %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. GÜN KARTLARI -->
+                <div class="col-lg-4">
+                    <div class="card shadow border-0 h-100">
+                        <div class="day-header bg-success">
+                            <h4 class="mb-0">3. GÜN</h4>
+                            <small>Sırt & Kardiyo (Çekme)</small>
+                        </div>
+                        <div class="card-body">
+                            <% plan.day3.forEach(exercise=> { %>
+                                <div class="mb-4">
+                                    <h6><strong>
+                                            <%= exercise.name %>
+                                        </strong></h6>
+                                    <div class="video-container">
+                                        <iframe src="<%= exercise.videoUrl %>" frameborder="0" allowfullscreen></iframe>
+                                    </div>
+                                    <span class="badge bg-secondary">
+                                        <%= exercise.difficulty %>
+                                    </span>
+                                </div>
+                                <hr>
+                                <% }) %>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- row bitişi -->
+        </div> <!-- container bitişi -->
+
+        <%- include('partials/footer') %>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

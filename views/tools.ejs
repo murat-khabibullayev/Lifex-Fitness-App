@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Hesaplama Araçları - LIFEX</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+</head>
+
+<body class="bg-tools-page" style="padding-top: 100px;">
+
+    <%- include('partials/navbar') %>
+
+        <div class="container pb-5">
+
+            <div class="text-center mb-5 text-white">
+                <h1 class="display-4 fw-bold">Profesyonel Hesaplama Merkezi</h1>
+                <p class="lead opacity-75">Vücudunu tanı, hedeflerine bilimsel verilerle ulaş.</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+
+                    <!-- SEKMELER (TABS) -->
+                    <ul class="nav nav-pills mb-4 justify-content-center" id="pills-tab" role="tablist">
+                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill"
+                                data-bs-target="#tab-food">Besin Değerleri</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill"
+                                data-bs-target="#tab-bodytype">Vücut Tipi</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill"
+                                data-bs-target="#tab-fat">Vücut Yağ %</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill"
+                                data-bs-target="#tab-bmi">Vücut Kitle (BMI)</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill"
+                                data-bs-target="#tab-bmr">Günlük Kalori (BMR)</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill"
+                                data-bs-target="#tab-heart">Maxksimum Kalp Hızı</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill"
+                                data-bs-target="#tab-water">Su İhtiyacı</button></li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-ideal">İdeal
+                                Kilo</button>
+                        </li>
+                    </ul>
+
+                    <!-- HESAPLAMA KARTI -->
+                    <div class="card shadow-lg border-0"
+                        style="background-color: rgba(0,0,0,0.85); backdrop-filter: blur(15px); color: white; border: 1px solid rgba(255,255,255,0.1);">
+                        <div class="card-body p-4 p-md-5">
+                            <div class="tab-content">
+
+                                <!-- 1. DETAYLI BESİN ARAMA -->
+                                <div class="tab-pane fade show active" id="tab-food">
+                                    <h3 class="text-warning mb-4"><i class="fa-solid fa-utensils me-2"></i> Detaylı
+                                        Besin Analizi</h3>
+
+                                    <div class="position-relative mb-4">
+                                        <input type="text" id="foodSearchInput"
+                                            class="form-control form-control-lg bg-dark text-white border-secondary"
+                                            placeholder="Besin ara (Örn: Yumurta, Pilav, Muz...)">
+                                        <ul id="foodSearchResults" class="list-unstyled d-none rounded"></ul>
+                                    </div>
+
+                                    <!-- Sonuç Ekranı -->
+                                    <div id="foodResultArea" class="d-none">
+                                        <div class="d-flex align-items-center mb-4">
+                                            <div class="bg-white p-2 rounded me-3">
+                                                <img id="foodImage" src="" width="60" height="60"
+                                                    style="object-fit: cover; border-radius: 5px;">
+                                            </div>
+                                            <div>
+                                                <h2 class="fw-bold mb-0" id="foodName">-</h2>
+                                                <small class="text-muted">1 Porsiyon (Standart)</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="row align-items-center">
+                                            <!-- Daire Grafik -->
+                                            <div class="col-md-4 text-center mb-3">
+                                                <div class="circle-chart" id="calorieCircle">
+                                                    <div class="circle-inner">
+                                                        <span class="fs-2 fw-bold" id="foodKcal">0</span>
+                                                        <span class="small">Kcal</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Makrolar -->
+                                            <div class="col-md-8">
+                                                <div class="row text-center">
+                                                    <div class="col-4">
+                                                        <h5 class="text-success">Karb</h5>
+                                                        <h3 class="fw-bold" id="foodCarb">0</h3>
+                                                        <small class="text-muted">gram</small>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <h5 class="text-danger">Protein</h5>
+                                                        <h3 class="fw-bold" id="foodProt">0</h3>
+                                                        <small class="text-muted">gram</small>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <h5 class="text-warning">Yağ</h5>
+                                                        <h3 class="fw-bold" id="foodFat">0</h3>
+                                                        <small class="text-muted">gram</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="border-secondary my-4">
+
+                                        <!-- Detaylı Tablo -->
+                                        <table class="table table-dark table-striped mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <th>Besin Değeri</th>
+                                                    <th>Miktar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Lif</td>
+                                                    <td id="foodFiber">0g</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Şeker</td>
+                                                    <td id="foodSugar">0g</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Kolesterol</td>
+                                                    <td id="foodChol">0mg</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- 2. VÜCUT TİPİ HESAPLAMA -->
+                                <div class="tab-pane fade" id="tab-bodytype">
+                                    <h3 class="text-info mb-4">📐 Vücut Tipi Analizi</h3>
+                                    <div class="row g-3">
+                                        <div class="col-md-12">
+                                            <label>Cinsiyet</label>
+                                            <select id="btGender"
+                                                class="form-select bg-dark text-white border-secondary">
+                                                <option value="female">Kadın</option>
+                                                <option value="male">Erkek</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6"><label>Göğüs Çevresi (cm)</label><input type="number"
+                                                id="btBust" class="form-control bg-dark text-white"></div>
+                                        <div class="col-md-6"><label>Bel Çevresi (cm)</label><input type="number"
+                                                id="btWaist" class="form-control bg-dark text-white"></div>
+                                        <div class="col-md-6"><label>Kalça Çevresi (cm)</label><input type="number"
+                                                id="btHip" class="form-control bg-dark text-white"></div>
+
+                                        <div class="col-12"><button onclick="calcBodyType()"
+                                                class="btn btn-info w-100 fw-bold text-dark mt-3">ANALİZ ET</button>
+                                        </div>
+                                    </div>
+                                    <div id="btResult"
+                                        class="mt-4 p-3 rounded d-none text-center bg-dark border border-secondary">
+                                        <h4>Vücut Tipiniz: <span class="text-info fw-bold" id="btValue">?</span></h4>
+                                    </div>
+                                </div>
+
+                                <!-- 3. VÜCUT YAĞ ORANI (Navy Method) -->
+                                <div class="tab-pane fade" id="tab-fat">
+                                    <h3 class="text-success mb-4">Vücut Yağ Oranı</h3>
+                                    <div class="alert alert-dark small"><i class="fa-solid fa-info-circle"></i> En doğru
+                                        sonuç için ABD Donanması formülü (Boyun ölçüsü dahil) kullanılmaktadır.</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6"><label>Cinsiyet</label><select id="bfGender"
+                                                class="form-select bg-dark text-white">
+                                                <option value="male">Erkek</option>
+                                                <option value="female">Kadın</option>
+                                            </select></div>
+                                        <div class="col-md-6"><label>Boy (cm)</label><input type="number" id="bfHeight"
+                                                class="form-control bg-dark text-white"></div>
+                                        <div class="col-md-6"><label>Kilo (kg)</label><input type="number" id="bfWeight"
+                                                class="form-control bg-dark text-white"></div>
+                                        <div class="col-md-6"><label>Boyun Çevresi (cm)</label><input type="number"
+                                                id="bfNeck" class="form-control bg-dark text-white"
+                                                placeholder="Zorunlu"></div>
+                                        <div class="col-md-6"><label>Bel Çevresi (cm)</label><input type="number"
+                                                id="bfWaist" class="form-control bg-dark text-white"></div>
+                                        <div class="col-md-6" id="bfHipDiv" style="display:none;"><label>Kalça Çevresi
+                                                (cm)</label><input type="number" id="bfHip"
+                                                class="form-control bg-dark text-white"></div>
+
+                                        <div class="col-12"><button onclick="calcBodyFat()"
+                                                class="btn btn-success w-100 fw-bold mt-3">YAĞ ORANINI HESAPLA</button>
+                                        </div>
+                                    </div>
+                                    <div id="bfResult"
+                                        class="mt-4 p-3 rounded d-none text-center bg-dark border border-secondary">
+                                        <h1 class="display-4 fw-bold text-success" id="bfValue">%0</h1>
+                                        <p id="bfStatus">Durum</p>
+                                    </div>
+                                </div>
+
+                                <!-- 4. VÜCUT KİTLE İNDEKSİ (BMI) -->
+                                <div class="tab-pane fade" id="tab-bmi">
+                                    <h3 class="text-primary mb-4">Vücut Kitle İndeksi (BMI)</h3>
+                                    <div class="row g-3">
+                                        <div class="col-md-6"><label>Boy (cm)</label><input type="number" id="bmiHeight"
+                                                class="form-control bg-dark text-white"></div>
+                                        <div class="col-md-6"><label>Kilo (kg)</label><input type="number"
+                                                id="bmiWeight" class="form-control bg-dark text-white"></div>
+                                        <div class="col-12"><button onclick="calcBMI()"
+                                                class="btn btn-primary w-100 fw-bold mt-3">BMI HESAPLA</button></div>
+                                    </div>
+                                    <div id="bmiResult"
+                                        class="mt-4 p-3 rounded d-none text-center bg-dark border border-secondary">
+                                        <h4>BMI Değeri: <span class="text-primary fw-bold" id="bmiVal">0</span></h4>
+                                        <p id="bmiStatus" class="mb-0">Durum</p>
+                                    </div>
+                                </div>
+
+                                <!-- 5. BAZAL METABOLİZMA HIZI (BMR) -->
+                                <div class="tab-pane fade" id="tab-bmr">
+                                    <h3 class="text-warning mb-4">Bazal Metabolizma Hızı (BMR)</h3>
+                                    <div class="row g-3">
+                                        <div class="col-md-6"><label>Cinsiyet</label><select id="bmrGender"
+                                                class="form-select bg-dark text-white">
+                                                <option value="male">Erkek</option>
+                                                <option value="female">Kadın</option>
+                                            </select></div>
+                                        <div class="col-md-6"><label>Yaş</label><input type="number" id="bmrAge"
+                                                class="form-control bg-dark text-white"></div>
+                                        <div class="col-md-6"><label>Boy (cm)</label><input type="number" id="bmrHeight"
+                                                class="form-control bg-dark text-white"></div>
+                                        <div class="col-md-6"><label>Kilo (kg)</label><input type="number"
+                                                id="bmrWeight" class="form-control bg-dark text-white"></div>
+
+                                        <div class="col-12"><button onclick="calcBMR()"
+                                                class="btn btn-warning w-100 fw-bold text-dark mt-3">BMR
+                                                HESAPLA</button></div>
+                                    </div>
+                                    <div id="bmrResult"
+                                        class="mt-4 p-3 rounded d-none text-center bg-dark border border-secondary">
+                                        <small class="text-muted">Bazal Metabolizma Hızı</small>
+                                        <h2 class="fw-bold text-warning mb-0" id="bmrVal">0.00</h2>
+                                        <p>Kalori / Gün</p>
+                                    </div>
+                                </div>
+
+                                <!-- 6. MAX KALP ATIŞ HIZI -->
+                                <div class="tab-pane fade" id="tab-heart">
+                                    <h3 class="text-danger mb-4">Maksimum Kalp Atış Hızı</h3>
+                                    <div class="row g-3">
+                                        <div class="col-md-6"><label>Yaşınız</label><input type="number" id="hrAge"
+                                                class="form-control bg-dark text-white"></div>
+                                        <div class="col-md-6">
+                                            <label>Antrenman Seviyesi</label>
+                                            <select id="hrIntensity" class="form-select bg-dark text-white">
+                                                <option value="0.6">Düşük Şiddet (%60)</option>
+                                                <option value="0.7">Orta Şiddet (%70)</option>
+                                                <option value="0.8">Yüksek Şiddet (%80)</option>
+                                                <option value="0.9">Çok Yüksek Şiddet (%90)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12"><button onclick="calcHeartRate()"
+                                                class="btn btn-danger w-100 fw-bold mt-3">HESAPLA</button></div>
+                                    </div>
+                                    <div id="hrResult"
+                                        class="mt-4 p-3 rounded d-none text-center bg-dark border border-secondary">
+                                        <small>Hedef Nabız:</small>
+                                        <h1 class="display-3 fw-bold text-danger mb-0" id="hrValue">0</h1>
+                                        <p>atım / dakika</p>
+                                    </div>
+                                </div>
+                                <!-- 7. SU İHTİYACI -->
+                                <div class="tab-pane fade" id="tab-water">
+                                    <h3 class="text-primary mb-4">Günlük Su İhtiyacı</h3>
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-12">
+                                            <label>Kilonuz (kg)</label>
+                                            <input type="number" id="waterWeight"
+                                                class="form-control bg-dark text-white border-secondary"
+                                                placeholder="70">
+                                        </div>
+                                        <div class="col-12">
+                                            <button onclick="calcWater()"
+                                                class="btn btn-primary w-100 fw-bold mt-3">HESAPLA</button>
+                                        </div>
+                                    </div>
+                                    <div id="waterResult" class="alert alert-dark mt-3 d-none text-center">
+                                        <small>İçmeniz Gereken Su:</small>
+                                        <h2 class="fw-bold text-primary mb-0" id="waterVal">0 Litre</h2>
+                                    </div>
+                                </div>
+                                <!-- İDEAL KİLO HESAPLAMA -->
+                                <div class="tab-pane fade" id="tab-ideal">
+                                    <h3 class="text-primary mb-4">İdeal Kilo Hesaplama</h3>
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-6">
+                                            <label>Cinsiyet</label>
+                                            <select id="idealGender"
+                                                class="form-select bg-dark text-white border-secondary">
+                                                <option value="male">Erkek</option>
+                                                <option value="female">Kadın</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Boy (cm)</label>
+                                            <input type="number" id="idealHeight"
+                                                class="form-control bg-dark text-white border-secondary"
+                                                placeholder="175">
+                                        </div>
+
+                                        <div class="col-12">
+                                            <button onclick="calcIdeal()"
+                                                class="btn btn-primary w-100 fw-bold mt-3">HESAPLA</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- SONUÇ ALANI -->
+                                    <div id="idealResult" class="alert alert-dark mt-3 d-none text-center">
+                                        <small class="text-muted">Olmanız Gereken İdeal Kilo:</small>
+                                        <h2 class="fw-bold text-primary mb-0" id="idealVal">0 kg</h2>
+                                        <p class="small text-secondary mt-1 mb-0">(Devine Formülü baz alınmıştır)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% if(!user) { %>
+                        <div class="text-center mt-5">
+                            <a href="/register" class="btn btn-outline-light btn-lg px-5 rounded-pill fw-bold">Sonuçları
+                                Kaydetmek İçin Kaydolun</a>
+                        </div>
+                        <% } %>
+                </div>
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>
+
+            <!-- SENİN AYIRDIĞIN JS DOSYASI -->
+            <script src="/js/tool-motor.js"></script>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
